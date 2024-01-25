@@ -1,0 +1,99 @@
+name: Deploy
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1.1.1
+        with:
+          bun-version: latest
+
+      - name: Install Packages
+        run: bun install --frozen-lockfile
+
+  # lint:
+  #   name: Lint
+  #   runs-on: ubuntu-latest
+  #   needs: [install]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: oven-sh/setup-bun@v1.1.1
+  #       with:
+  #         bun-version: latest
+
+  #     - name: Install Packages
+  #       run: bun install --frozen-lockfile
+
+  #     - name: Lint
+  #       run: bun lint
+
+  # test:
+  #   name: Test
+  #   runs-on: ubuntu-latest
+  #   needs: [install]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: oven-sh/setup-bun@v1.1.1
+  #       with:
+  #         bun-version: latest
+
+  #     - name: Install Packages
+  #       run: bun install --frozen-lockfile
+
+  #     - name: Coverage
+  #       run: bun test --coverage
+
+  #     # TODO: Enable once LCOV is supported
+  #     # https://github.com/oven-sh/bun/issues/4015
+  #     # - name: Coveralls
+  #     #   uses: coverallsapp/github-action@master
+  #     #   with:
+  #     #     github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [install]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1.1.1
+        with:
+          bun-version: latest
+
+      - name: Install Packages
+        run: bun install --frozen-lockfile
+
+      - name: Build
+        run: bun run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3.0.0
+        with:
+          path: dist
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [build]
+    # needs: [lint, test, build]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4.0.3
