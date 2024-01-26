@@ -15,6 +15,7 @@ export namespace Todo {
 }
 
 export interface IStorage {
+  everything(): Promise<Storage.Data>;
   get<T>(key: Storage.Keys, id?: string): Promise<T | T[]>;
   set<T>(key: Storage.Keys, id: string, value: T): Promise<void>;
   delete(key: Storage.Keys, id: string): Promise<void>;
@@ -31,6 +32,12 @@ export class WebStorage implements IStorage {
         }
       },
     });
+  }
+
+  async everything(): Promise<Storage.Data> {
+    return {
+      lists: await this.get(Storage.Keys.LISTS),
+    };
   }
 
   async get<T>(key: Storage.Keys): Promise<T[]>;
@@ -67,6 +74,10 @@ export class Storage {
     }
   }
 
+  static async everything(): Promise<Storage.Data> {
+    return this.storage.everything();
+  }
+
   static async get<T>(key: Storage.Keys): Promise<T[]>;
   static async get<T>(key: Storage.Keys, id: string): Promise<T>;
   static async get<T>(key: Storage.Keys, id?: string): Promise<T | T[]> {
@@ -86,4 +97,8 @@ export namespace Storage {
   export enum Keys {
     LISTS = 'lists',
   }
+
+  export type Data = {
+    lists: Todo.List[];
+  };
 }

@@ -1,11 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
+import { DataPage } from './routes/DataPage';
 import { ErrorPage } from './routes/ErrorPage';
 import { Root } from './routes/Root';
 import { TodoList } from './routes/TodoList';
 import { TodoLists } from './routes/TodoLists';
 import { IStorage, Storage } from './storage';
+
+if (module.hot) {
+  module.hot.accept();
+}
 
 export function hook(storage: IStorage) {
   console.log(`📡 Initializing storage...`);
@@ -27,6 +32,11 @@ export function hook(storage: IStorage) {
           path: '/todo/:id',
           element: <TodoList />,
           loader: TodoList.loader,
+        },
+        {
+          path: '/data',
+          element: <DataPage />,
+          loader: DataPage.loader,
         },
       ],
     },
