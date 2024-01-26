@@ -34,7 +34,7 @@ export function TodoLists() {
             };
 
             setLists([list, ...lists]);
-            Storage.set(Storage.Keys.LISTS, list.id, list);
+            Storage.set(Storage.Keys.LISTS, list);
           }}
         >
           <BadgePlus />

@@ -20,7 +20,7 @@ export function TodoList() {
 
   const onChange = async (updatedList: Todo.List) => {
     setList(updatedList);
-    await Storage.set(Storage.Keys.LISTS, updatedList.id, updatedList);
+    await Storage.set(Storage.Keys.LISTS, updatedList);
   };
 
   if (!list) return <Navigate to="/todo" />;
