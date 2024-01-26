@@ -1,3 +1,4 @@
+import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { ListItem } from '@/components/ListItem';
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
@@ -15,7 +16,7 @@ export function TodoList() {
   const externalList = useLoaderData() as Todo.List;
   const [list, setList] = useCachedState<Todo.List>(() => externalList, [externalList]);
   const allDone = useMemo(() => {
-    return list?.items.every((item) => item.done);
+    return list?.items.length && list?.items.every((item) => item.done);
   }, [list?.items]);
 
   const onChange = async (updatedList: Todo.List) => {
@@ -39,6 +40,7 @@ export function TodoList() {
           <Checkbox
             className="shrink-0"
             checked={allDone}
+            disabled={list.items.length === 0}
             onClick={() => {
               onChange({
                 ...list,
@@ -58,17 +60,17 @@ export function TodoList() {
               })
             }
           />
-          <Button
-            className="shrink-0"
-            variant="destructive"
-            size="icon"
-            onClick={async () => {
+          <ConfirmDialog
+            description="This action cannot be undone. This will permanently this list."
+            onSubmit={async () => {
               setList(undefined);
               await Storage.delete(Storage.Keys.LISTS, list.id);
             }}
           >
-            <Flame />
-          </Button>
+            <Button className="shrink-0" variant="destructive" size="icon">
+              <Flame />
+            </Button>
+          </ConfirmDialog>
         </div>
         <Separator />
         <ListItem
@@ -112,7 +114,7 @@ export namespace TodoList {
   export async function loader({ params }: LoaderFunctionArgs<any>) {
     if (!params.id) return redirect('/');
 
-    const list = await Storage.get<Todo.List>(Storage.Keys.LISTS, params.id);
+    const list = await Storage.get(Storage.Keys.LISTS, params.id);
 
     if (!list) return redirect('/todo');
 
