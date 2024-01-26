@@ -20,7 +20,10 @@ export interface IStorage {
     key: Storage.Keys,
     id?: string
   ): Promise<Storage.DataReturnType<typeof key> | Storage.DataReturnType<typeof key>[]>;
-  set(key: Storage.Keys, id: string, value: Storage.DataReturnType<typeof key>): Promise<void>;
+  set(
+    key: Storage.Keys,
+    value: Storage.DataReturnType<typeof key> | Storage.DataReturnType<typeof key>[]
+  ): Promise<void>;
   delete(key: Storage.Keys, id: string): Promise<void>;
   clear(): Promise<void>;
 }
@@ -59,9 +62,19 @@ export class WebStorage implements IStorage {
     return await db.getAll(key);
   }
 
-  async set(key: Storage.Keys, id: string, value: Storage.DataReturnType<typeof key>): Promise<void> {
+  async set(
+    key: Storage.Keys,
+    value: Storage.DataReturnType<typeof key> | Storage.DataReturnType<typeof key>[]
+  ): Promise<void> {
     const db = await this.open();
-    await db.put(key, value, id);
+
+    if (Array.isArray(value)) {
+      const tx = db.transaction(key, 'readwrite');
+
+      await Promise.all([...value.map((v) => tx.store.put(v, v.id)), tx.done]);
+    } else {
+      await db.put(key, value, value.id);
+    }
   }
 
   async delete(key: Storage.Keys, id: string): Promise<void> {
@@ -94,18 +107,36 @@ export class Storage {
     const data = await this.storage.everything();
 
     if (stringify) {
-      return Object.keys(data).reduce<Storage.Data.Raw>(
+      return this.convert(data);
+    }
+
+    return data;
+  }
+
+  static convert(data: Storage.Data): Storage.Data.Raw;
+  static convert(data: Storage.Data.Raw): Storage.Data;
+  static convert(data: Storage.Data | Storage.Data.Raw): Storage.Data | Storage.Data.Raw {
+    if (typeof data[Storage.Keys.LISTS] === 'string') {
+      return Object.keys(data).reduce<Storage.Data>(
         (output, key) => {
-          output[key] = JSON.stringify(data[key], null, 4);
+          output[key] = JSON.parse(data[key]);
           return output;
         },
         {
-          [Storage.Keys.LISTS]: '[]',
+          [Storage.Keys.LISTS]: [],
         }
       );
     }
 
-    return data;
+    return Object.keys(data).reduce<Storage.Data.Raw>(
+      (output, key) => {
+        output[key] = JSON.stringify(data[key], null, 4);
+        return output;
+      },
+      {
+        [Storage.Keys.LISTS]: '[]',
+      }
+    );
   }
 
   static async get(key: Storage.Keys): Promise<Storage.DataReturnType<typeof key>[]>;
@@ -117,8 +148,16 @@ export class Storage {
     return this.storage.get(key, id);
   }
 
-  static async set(key: Storage.Keys, id: string, value: Storage.DataReturnType<typeof key>): Promise<void> {
-    return this.storage.set(key, id, value);
+  static async set(key: Storage.Keys, value: Storage.DataReturnType<typeof key>): Promise<void> {
+    return this.storage.set(key, value);
+  }
+
+  static async load(data: Storage.Data): Promise<void> {
+    await Promise.all(
+      Object.keys(data).map((key: Storage.Keys) => {
+        return this.storage.set(key, data[key]);
+      })
+    );
   }
 
   static async delete(key: Storage.Keys, id: string): Promise<void> {
