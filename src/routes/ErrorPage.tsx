@@ -9,13 +9,15 @@ export function ErrorPage() {
 
   return (
     <div id="error-page" className="flex flex-col items-center pt-20">
-      <Card>
+      <Card className="sm:max-w-2xl">
         <CardHeader>
           <CardTitle>Oops!</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-2">
           <p>Sorry, an unexpected error has occurred.</p>
-          <code className="flex p-2 rounded-md bg-secondary/50 w-full italic">{error.statusText || error.message}</code>
+          <code className="flex p-2 rounded-md bg-secondary/50 text-pink-400 w-full italic">
+            {error.statusText || error.message}
+          </code>
         </CardContent>
         <CardFooter>
           <Button className="w-full" asChild variant="secondary">
