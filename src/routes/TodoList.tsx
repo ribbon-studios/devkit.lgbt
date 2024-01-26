@@ -61,7 +61,7 @@ export function TodoList() {
             }
           />
           <ConfirmDialog
-            description="This action cannot be undone. This will permanently this list."
+            description="This action cannot be undone. This will permanently delete this list."
             onSubmit={async () => {
               setList(undefined);
               await Storage.delete(Storage.Keys.LISTS, list.id);

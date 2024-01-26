@@ -1,7 +1,7 @@
-import { Bug, Code, Database, ExternalLink, ListTodo, LucideIcon } from 'lucide-react';
+import { Bug, Code, Database, ListTodo, LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from './ui/button';
+import { ButtonIcon } from './ButtonIcon';
 
 export type HeaderProps = {
   children: ReactNode;
@@ -38,36 +38,26 @@ export function Header({ children }: HeaderProps) {
     <div className="flex min-h-screen max-h-screen">
       <div
         className={
-          'rounded-lg flex flex-col bg-background border-r border-r-border shadow-sm shadow-indigo-950 p-4 gap-2 min-w-60'
+          'flex flex-col bg-background border-r border-r-border shadow-sm shadow-indigo-950 p-2 sm:p-4 gap-2 min-w-8 sm:min-w-60'
         }
       >
-        <Link className={'font-extrabold text-2xl hover:text-white/80 transition-colors'} to="/">
-          Devkit
+        <Link
+          className="flex items-center justify-center sm:justify-start font-extrabold text-2xl hover:text-white/80 transition-colors"
+          to="/"
+        >
+          D<span className="hidden sm:inline">evkit</span>
         </Link>
-        {items.map((item, index) => {
-          return (
-            <Button key={index} className="flex gap-2 justify-start" size="sm" asChild variant="ghost">
-              <Link to={item.href}>
-                <item.icon />
-                {item.label}
-              </Link>
-            </Button>
-          );
-        })}
+        {items.map((item, index) => (
+          <ButtonIcon key={index} icon={item.icon} href={item.href} variant="ghost">
+            {item.label}
+          </ButtonIcon>
+        ))}
         <div className="flex-1" />
-        {additionalItems.map((item, index) => {
-          const isExternal = item.href.startsWith('https');
-
-          return (
-            <Button key={index} className="flex gap-2 justify-start" size="sm" asChild variant="ghost">
-              <Link to={item.href} target={isExternal ? '_blank' : undefined}>
-                <item.icon />
-                <div className="flex-1">{item.label}</div>
-                {isExternal && <ExternalLink />}
-              </Link>
-            </Button>
-          );
-        })}
+        {additionalItems.map((item, index) => (
+          <ButtonIcon key={index} icon={item.icon} href={item.href} variant="ghost">
+            {item.label}
+          </ButtonIcon>
+        ))}
       </div>
       <div className="flex flex-1 flex-col overflow-auto">{children}</div>
     </div>

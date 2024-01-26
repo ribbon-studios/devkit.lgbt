@@ -57,11 +57,11 @@ export function TodoLists() {
                     {label}
                   </Link>
                 </Button>
-                <div className="flex bg-secondary h-10 px-4 items-center justify-center rounded-md">
+                <div className="hidden sm:flex bg-secondary h-10 px-4 items-center justify-center rounded-md">
                   {items.length} Items
                 </div>
                 <ConfirmDialog
-                  description="This action cannot be undone. This will permanently this list."
+                  description="This action cannot be undone. This will permanently delete this list."
                   onSubmit={async () => {
                     setLists(lists.filter((list) => list.id !== id));
                     await Storage.delete(Storage.Keys.LISTS, id);
