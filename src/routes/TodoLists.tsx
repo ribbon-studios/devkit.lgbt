@@ -80,6 +80,6 @@ export function TodoLists() {
 
 export namespace TodoLists {
   export async function loader() {
-    return await Storage.get<Todo.List[]>(Storage.Keys.LISTS);
+    return await Storage.get(Storage.Keys.LISTS);
   }
 }

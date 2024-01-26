@@ -16,9 +16,13 @@ export namespace Todo {
 
 export interface IStorage {
   everything(): Promise<Storage.Data>;
-  get<T>(key: Storage.Keys, id?: string): Promise<T | T[]>;
-  set<T>(key: Storage.Keys, id: string, value: T): Promise<void>;
+  get(
+    key: Storage.Keys,
+    id?: string
+  ): Promise<Storage.DataReturnType<typeof key> | Storage.DataReturnType<typeof key>[]>;
+  set(key: Storage.Keys, id: string, value: Storage.DataReturnType<typeof key>): Promise<void>;
   delete(key: Storage.Keys, id: string): Promise<void>;
+  clear(): Promise<void>;
 }
 
 export class WebStorage implements IStorage {
@@ -36,13 +40,16 @@ export class WebStorage implements IStorage {
 
   async everything(): Promise<Storage.Data> {
     return {
-      lists: await this.get(Storage.Keys.LISTS),
+      [Storage.Keys.LISTS]: await this.get(Storage.Keys.LISTS),
     };
   }
 
-  async get<T>(key: Storage.Keys): Promise<T[]>;
-  async get<T>(key: Storage.Keys, id: string): Promise<T>;
-  async get<T>(key: Storage.Keys, id?: string): Promise<T | T[]> {
+  async get(key: Storage.Keys): Promise<Storage.DataReturnType<typeof key>[]>;
+  async get(key: Storage.Keys, id: string): Promise<Storage.DataReturnType<typeof key>>;
+  async get(
+    key: Storage.Keys,
+    id?: string
+  ): Promise<Storage.DataReturnType<typeof key> | Storage.DataReturnType<typeof key>[]> {
     const db = await this.open();
 
     if (id) {
@@ -52,7 +59,7 @@ export class WebStorage implements IStorage {
     return await db.getAll(key);
   }
 
-  async set<T>(key: Storage.Keys, id: string, value: T): Promise<void> {
+  async set(key: Storage.Keys, id: string, value: Storage.DataReturnType<typeof key>): Promise<void> {
     const db = await this.open();
     await db.put(key, value, id);
   }
@@ -60,6 +67,12 @@ export class WebStorage implements IStorage {
   async delete(key: Storage.Keys, id: string): Promise<void> {
     const db = await this.open();
     await db.delete(key, id);
+  }
+
+  async clear(): Promise<void> {
+    const db = await this.open();
+
+    await Promise.all(Object.values(Storage.Keys).map((key) => db.clear(key)));
   }
 }
 
@@ -74,22 +87,46 @@ export class Storage {
     }
   }
 
-  static async everything(): Promise<Storage.Data> {
-    return this.storage.everything();
+  static async everything(): Promise<Storage.Data>;
+  static async everything(stringify: false): Promise<Storage.Data>;
+  static async everything(stringify: true): Promise<Storage.Data.Raw>;
+  static async everything(stringify?: boolean): Promise<Storage.Data | Storage.Data.Raw> {
+    const data = await this.storage.everything();
+
+    if (stringify) {
+      return Object.keys(data).reduce<Storage.Data.Raw>(
+        (output, key) => {
+          output[key] = JSON.stringify(data[key], null, 4);
+          return output;
+        },
+        {
+          [Storage.Keys.LISTS]: '[]',
+        }
+      );
+    }
+
+    return data;
   }
 
-  static async get<T>(key: Storage.Keys): Promise<T[]>;
-  static async get<T>(key: Storage.Keys, id: string): Promise<T>;
-  static async get<T>(key: Storage.Keys, id?: string): Promise<T | T[]> {
-    return this.storage.get<T>(key, id);
+  static async get(key: Storage.Keys): Promise<Storage.DataReturnType<typeof key>[]>;
+  static async get(key: Storage.Keys, id: string): Promise<Storage.DataReturnType<typeof key>>;
+  static async get(
+    key: Storage.Keys,
+    id?: string
+  ): Promise<Storage.DataReturnType<typeof key> | Storage.DataReturnType<typeof key>[]> {
+    return this.storage.get(key, id);
   }
 
-  static async set<T>(key: Storage.Keys, id: string, value: T): Promise<void> {
-    return this.storage.set<T>(key, id, value);
+  static async set(key: Storage.Keys, id: string, value: Storage.DataReturnType<typeof key>): Promise<void> {
+    return this.storage.set(key, id, value);
   }
 
   static async delete(key: Storage.Keys, id: string): Promise<void> {
     return this.storage.delete(key, id);
+  }
+
+  static async clear(): Promise<void> {
+    return this.storage.clear();
   }
 }
 
@@ -99,6 +136,14 @@ export namespace Storage {
   }
 
   export type Data = {
-    lists: Todo.List[];
+    [Storage.Keys.LISTS]: Todo.List[];
   };
+
+  export namespace Data {
+    export type Raw = Record<Storage.Keys, string>;
+  }
+
+  export type DataReturnType<T extends Storage.Keys> = Storage.Data[T] extends Array<any>
+    ? Storage.Data[T][0]
+    : Storage.Data[T];
 }
