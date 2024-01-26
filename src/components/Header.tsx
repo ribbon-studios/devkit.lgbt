@@ -35,7 +35,7 @@ const additionalItems: Header.Item[] = [
 
 export function Header({ children }: HeaderProps) {
   return (
-    <div className="flex min-h-screen max-h-screen">
+    <div className="flex min-h-dvh max-h-dvh">
       <div
         className={
           'flex flex-col bg-background border-r border-r-border shadow-sm shadow-indigo-950 p-2 sm:p-4 gap-2 min-w-8 sm:min-w-60'
