@@ -12,7 +12,7 @@ import { Flame } from 'lucide-react';
 import { useMemo } from 'react';
 import { Link, LoaderFunctionArgs, Navigate, redirect, useLoaderData } from 'react-router-dom';
 
-export function TodoList() {
+export function TodoListPage() {
   const externalList = useLoaderData() as Todo.List;
   const [list, setList] = useCachedState<Todo.List>(() => externalList, [externalList]);
   const allDone = useMemo(() => {
@@ -110,7 +110,7 @@ export function TodoList() {
   );
 }
 
-export namespace TodoList {
+export namespace TodoListPage {
   export async function loader({ params }: LoaderFunctionArgs<any>) {
     if (!params.id) return redirect('/');
 

@@ -9,7 +9,7 @@ import { BadgePlus, Flame, ListTodo } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
 
-export function TodoLists() {
+export function TodoListsPage() {
   const externalList = useLoaderData() as Todo.List[];
   const [search, setSearch] = useState<string>('');
   const [lists, setLists] = useCachedState<Todo.List[]>(() => externalList, [externalList]);
@@ -80,7 +80,7 @@ export function TodoLists() {
   );
 }
 
-export namespace TodoLists {
+export namespace TodoListsPage {
   export async function loader() {
     return await Storage.get(Storage.Keys.LISTS);
   }

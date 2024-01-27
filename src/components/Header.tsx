@@ -1,4 +1,4 @@
-import { Bug, Code, Database, ListTodo, LucideIcon } from 'lucide-react';
+import { Bug, Code, Database, Hash, ListTodo, LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { ButtonIcon } from './ButtonIcon';
@@ -12,6 +12,11 @@ const items: Header.Item[] = [
     href: '/todo',
     label: 'Todo List',
     icon: ListTodo,
+  },
+  {
+    href: '/hash',
+    label: 'Generate Hash',
+    icon: Hash,
   },
 ];
 
