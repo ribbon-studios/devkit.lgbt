@@ -48,13 +48,14 @@ export const NESTED_ROUTES: NestedRoute[] = [
   },
 ];
 
-export const REACT_ROUTES: RouteObject[] = [...ROUTES, ...SUB_ROUTES, ...NESTED_ROUTES].map(
-  ({ path, element: Element, loader }) => ({
-    path,
-    element: <Element />,
-    loader,
-  })
-);
+const routeToReactRoute = ({ path, element: Element, loader, children }: Route | NestedRoute): RouteObject => ({
+  path,
+  element: <Element />,
+  loader,
+  children: children?.map(routeToReactRoute),
+});
+
+export const REACT_ROUTES: RouteObject[] = [...ROUTES, ...SUB_ROUTES, ...NESTED_ROUTES].map(routeToReactRoute);
 
 export type Route = {
   path: string;
@@ -62,6 +63,7 @@ export type Route = {
   loader?: LoaderFunction<any>;
   icon: LucideIcon;
   label: string;
+  children?: NestedRoute[];
 };
 
 export type NestedRoute = Omit<Route, 'icon' | 'label'>;
