@@ -1,4 +1,5 @@
-import { Bug, Code, Database, Hash, ListTodo, LucideIcon } from 'lucide-react';
+import { ROUTES, SUB_ROUTES } from '@/routes';
+import { Bug, Code, LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { ButtonIcon } from './ButtonIcon';
@@ -7,35 +8,20 @@ export type HeaderProps = {
   children: ReactNode;
 };
 
-const items: Header.Item[] = [
-  {
-    href: '/todo',
-    label: 'Todo List',
-    icon: ListTodo,
-  },
-  {
-    href: '/hash',
-    label: 'Generate Hash',
-    icon: Hash,
-  },
-];
-
-const additionalItems: Header.Item[] = [
-  {
-    href: '/data',
-    label: 'View Data',
-    icon: Database,
-  },
-  {
-    href: 'https://github.com/rain-cafe/devkit.lgbt/issues',
-    label: 'Report an Issue',
-    icon: Bug,
-  },
-  {
-    href: 'https://github.com/rain-cafe/devkit.lgbt',
-    label: 'Source Code',
-    icon: Code,
-  },
+const additionalItems = [
+  ...SUB_ROUTES,
+  ...([
+    {
+      path: 'https://github.com/rain-cafe/devkit.lgbt/issues',
+      label: 'Report an Issue',
+      icon: Bug,
+    },
+    {
+      path: 'https://github.com/rain-cafe/devkit.lgbt',
+      label: 'Source Code',
+      icon: Code,
+    },
+  ] as Header.Item[]),
 ];
 
 export function Header({ children }: HeaderProps) {
@@ -52,14 +38,14 @@ export function Header({ children }: HeaderProps) {
         >
           D<span className="hidden sm:inline">evkit</span>
         </Link>
-        {items.map((item, index) => (
-          <ButtonIcon key={index} icon={item.icon} href={item.href} variant="ghost">
+        {ROUTES.map((item, index) => (
+          <ButtonIcon key={index} icon={item.icon} to={item.path} variant="ghost">
             {item.label}
           </ButtonIcon>
         ))}
         <div className="flex-1" />
         {additionalItems.map((item, index) => (
-          <ButtonIcon key={index} icon={item.icon} href={item.href} variant="ghost">
+          <ButtonIcon key={index} icon={item.icon} to={item.path} variant="ghost">
             {item.label}
           </ButtonIcon>
         ))}
@@ -72,7 +58,7 @@ export function Header({ children }: HeaderProps) {
 export namespace Header {
   export type Item = {
     label: string;
-    href: string;
+    path: string;
     icon: LucideIcon;
   };
 }
