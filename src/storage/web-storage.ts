@@ -5,10 +5,14 @@ export class WebStorage implements IStorage {
   static instance = new WebStorage();
 
   private async open(): Promise<IDBPDatabase> {
-    return await openDB('devkit', 1, {
-      upgrade(db) {
-        for (const key of Object.values(StorageKeys)) {
-          db.createObjectStore(key);
+    return await openDB('devkit', 2, {
+      upgrade(db, oldVersion) {
+        if (oldVersion < 1) {
+          db.createObjectStore(StorageKeys.LISTS);
+        }
+
+        if (oldVersion < 2) {
+          db.createObjectStore(StorageKeys.NOTES);
         }
       },
     });
