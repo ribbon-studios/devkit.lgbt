@@ -1,7 +1,9 @@
-import { Database, Hash, ListTodo, LucideIcon } from 'lucide-react';
+import { Database, Hash, ListTodo, LucideIcon, NotebookText } from 'lucide-react';
 import { LoaderFunction, RouteObject } from 'react-router-dom';
 import { DataPage } from './DataPage';
 import { HashingPage } from './HashingPage';
+import { NotePage } from './NotePage';
+import { NotesPage } from './NotesPage';
 import { TodoListPage } from './TodoListPage';
 import { TodoListsPage } from './TodoListsPage';
 
@@ -9,6 +11,13 @@ import { TodoListsPage } from './TodoListsPage';
  * Routes that appear at the top of the header
  */
 export const ROUTES: Route[] = [
+  {
+    path: '/notes',
+    element: NotesPage,
+    loader: NotesPage.loader,
+    icon: NotebookText,
+    label: 'Notes',
+  },
   {
     path: '/todo',
     element: TodoListsPage,
@@ -45,6 +54,11 @@ export const NESTED_ROUTES: NestedRoute[] = [
     path: '/todo/:id',
     element: TodoListPage,
     loader: TodoListPage.loader,
+  },
+  {
+    path: '/notes/:id',
+    element: NotePage,
+    loader: NotePage.loader,
   },
 ];
 

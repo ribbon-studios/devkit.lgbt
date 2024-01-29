@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { Storage, Todo } from '@/storage';
+import { Storage, StorageKeys, Todo } from '@/storage';
 import { useCachedState } from '@rain-cafe/react-utils';
 import { Flame } from 'lucide-react';
 import { useMemo } from 'react';
@@ -16,12 +16,12 @@ export function TodoListPage() {
   const externalList = useLoaderData() as Todo.List;
   const [list, setList] = useCachedState<Todo.List>(() => externalList, [externalList]);
   const allDone = useMemo(() => {
-    return list?.items.length && list?.items.every((item) => item.done);
+    return Boolean(list?.items.length) && list?.items.every((item) => item.done);
   }, [list?.items]);
 
   const onChange = async (updatedList: Todo.List) => {
     setList(updatedList);
-    await Storage.set(Storage.Keys.LISTS, updatedList);
+    await Storage.set(StorageKeys.LISTS, updatedList);
   };
 
   if (!list) return <Navigate to="/todo" />;
@@ -64,7 +64,7 @@ export function TodoListPage() {
             description="This action cannot be undone. This will permanently delete this list."
             onSubmit={async () => {
               setList(undefined);
-              await Storage.delete(Storage.Keys.LISTS, list.id);
+              await Storage.delete(StorageKeys.LISTS, list.id);
             }}
           >
             <Button className="shrink-0" variant="destructive" size="icon">
@@ -114,7 +114,7 @@ export namespace TodoListPage {
   export async function loader({ params }: LoaderFunctionArgs<any>) {
     if (!params.id) return redirect('/');
 
-    const list = await Storage.get(Storage.Keys.LISTS, params.id);
+    const list = await Storage.get(StorageKeys.LISTS, params.id);
 
     if (!list) return redirect('/todo');
 

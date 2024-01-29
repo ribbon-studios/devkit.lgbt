@@ -1,7 +1,12 @@
 {
   "compilerOptions": {
-    "esModuleInterop": true,
+    "target": "es2015",
     "jsx": "react-jsx",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "paths": {
       "@/*": ["./src/*"]
     }
