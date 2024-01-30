@@ -17,11 +17,13 @@ See [Releases](https://github.com/rain-cafe/devkit.lgbt/releases/latest)!
 
 **We currently build versions of the app for:**
 
-- Linux (`deb`)
+- Linux (`deb` and `AppImage`)
 - Windows (`exe` and `msi`)
 - MacOS (`dmg`)
 
-**NOTE: Currently there's an issue with AppImage hence why we don't support it (see [#1](/issues/1))**
+```sh
+chmod u+x ./devkit_<version>_amd64.AppImage
+```
 
 ### FAQ
 
