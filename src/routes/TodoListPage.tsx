@@ -1,5 +1,6 @@
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { ListItem } from '@/components/ListItem';
+import { ListItems } from '@/components/ListItems';
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
 import { Button } from '@/components/ui/button';
@@ -83,28 +84,15 @@ export function TodoListPage() {
           }}
           blank
         />
-        {list.items.map((item) => (
-          <ListItem
-            key={item.id}
-            item={item}
-            onChange={(updatedItem) => {
-              onChange({
-                ...list,
-                items: list.items.map((item) => {
-                  if (item.id !== updatedItem.id) return item;
-
-                  return updatedItem;
-                }),
-              });
-            }}
-            onDelete={(deletedItem) => {
-              onChange({
-                ...list,
-                items: list.items.filter((item) => item.id !== deletedItem.id),
-              });
-            }}
-          />
-        ))}
+        <ListItems
+          items={list.items}
+          onChange={(updatedItems) => {
+            onChange({
+              ...list,
+              items: updatedItems,
+            });
+          }}
+        />
       </PageContent>
     </>
   );

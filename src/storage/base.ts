@@ -9,6 +9,7 @@ export namespace Todo {
     id: string;
     done: boolean;
     label: string;
+    subItems: Item[];
   };
 }
 
