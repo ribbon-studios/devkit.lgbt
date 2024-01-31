@@ -9,5 +9,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  test: {
+    environment: 'happy-dom',
+  },
   plugins: [react()],
 });
