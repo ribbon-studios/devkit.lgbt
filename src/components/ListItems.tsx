@@ -3,16 +3,18 @@ import { Storage, StorageKeys, Todo } from '@/storage';
 import { LoaderFunctionArgs, redirect } from 'react-router-dom';
 
 export type ListItemsProps = {
+  autoFocus?: boolean;
   items: Todo.Item[];
   onChange: (updatedItems: Todo.Item[]) => void;
   onUnnestRequested?: (updatedItem: Todo.Item, source: boolean) => void;
 };
 
-export function ListItems({ items, onChange, onUnnestRequested }: ListItemsProps) {
+export function ListItems({ autoFocus, items, onChange, onUnnestRequested }: ListItemsProps) {
   return (
     <>
       {items.map((item, i) => (
         <ListItem
+          autoFocus={autoFocus}
           key={item.id}
           item={item}
           onChange={(updatedItem) => {

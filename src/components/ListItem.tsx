@@ -1,5 +1,6 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import { refocus } from '@/lib/dom';
 import { isDone, setDone } from '@/lib/items';
 import { cn } from '@/lib/utils';
 import { Todo } from '@/storage';
@@ -13,6 +14,7 @@ import { Button } from './ui/button';
 export type ListItemProps = {
   item?: Todo.Item;
   placeholder?: string;
+  autoFocus?: boolean;
   blank?: boolean;
   onChange: (item: Todo.Item) => void;
   onDelete?: (item: Todo.Item) => void;
@@ -23,6 +25,7 @@ export type ListItemProps = {
 export function ListItem({
   item: externalItem,
   placeholder,
+  autoFocus,
   blank,
   onChange,
   onDelete,
@@ -44,7 +47,7 @@ export function ListItem({
   if (!item) return null;
 
   const onSubmit = (updatedItem: Todo.Item) => {
-    if (!updatedItem.label) return;
+    if (!updatedItem.label || externalItem === item) return;
 
     onChange(updatedItem);
 
@@ -75,6 +78,7 @@ export function ListItem({
           />
         </div>
         <Input
+          autoFocus={autoFocus}
           className={cn(done && 'line-through')}
           placeholder={placeholder}
           value={item.label}
@@ -84,10 +88,16 @@ export function ListItem({
               label: e.target.value,
             });
           }}
-          onBlur={() => onSubmit(item)}
+          onBlur={(e) => {
+            onSubmit(item);
+
+            if (blank) refocus(e.currentTarget);
+          }}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               onSubmit(item);
+
+              if (blank) refocus(e.currentTarget);
             } else if (e.key === 'Tab') {
               e.preventDefault();
 
