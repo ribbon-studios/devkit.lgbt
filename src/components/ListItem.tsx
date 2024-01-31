@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { Todo } from '@/storage';
 import { createId } from '@paralleldrive/cuid2';
 import { useCachedState } from '@rain-cafe/react-utils';
-import { Flame } from 'lucide-react';
+import { ArrowLeftToLine, ArrowRightToLine, Flame } from 'lucide-react';
 import { SyntheticEvent, useMemo } from 'react';
 import { ListItems } from './ListItems';
 import { Button } from './ui/button';
@@ -16,10 +16,12 @@ export type ListItemProps = {
   placeholder?: string;
   autoFocus?: boolean;
   blank?: boolean;
+  parentItem?: Todo.Item;
+  previousItem?: Todo.Item;
   onChange: (item: Todo.Item) => void;
   onDelete?: (item: Todo.Item) => void;
-  onNestRequested?: (item: Todo.Item) => void;
-  onUnnestRequested?: (item: Todo.Item, source: boolean) => void;
+  onNest?: (item: Todo.Item, previousItem: Todo.Item) => void;
+  onUnnest?: (item: Todo.Item, parentItem: Todo.Item) => void;
 };
 
 export function ListItem({
@@ -27,10 +29,12 @@ export function ListItem({
   placeholder,
   autoFocus,
   blank,
+  parentItem,
+  previousItem,
   onChange,
   onDelete,
-  onNestRequested,
-  onUnnestRequested,
+  onNest,
+  onUnnest,
 }: ListItemProps) {
   const [item, setItem] = useCachedState<Todo.Item>(
     () =>
@@ -43,6 +47,8 @@ export function ListItem({
     [externalItem]
   );
   const done = useMemo(() => isDone(item), [item]);
+  const isNestDisabled = blank || previousItem === undefined;
+  const isUnnestDisabled = blank || parentItem === undefined;
 
   if (!item) return null;
 
@@ -63,6 +69,18 @@ export function ListItem({
     } else {
       setItem(updatedItem);
     }
+  };
+
+  const onNestRequested = (item: Todo.Item) => {
+    if (isNestDisabled || !onNest) return;
+
+    onNest(item, previousItem);
+  };
+
+  const onUnnestRequested = (item: Todo.Item, forwardedParentItem?: Todo.Item) => {
+    if (isUnnestDisabled || !onUnnest) return;
+
+    onUnnest(item, forwardedParentItem ?? parentItem);
   };
 
   return (
@@ -93,30 +111,54 @@ export function ListItem({
           onBlur={(e) => onSubmit(item, e)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              onSubmit(item, e);
-            } else if (e.key === 'Tab') {
+              return onSubmit(item, e);
+            }
+
+            if (blank) return;
+
+            if (e.ctrlKey && e.key === 'a') {
               e.preventDefault();
 
-              if (blank) return;
+              onUnnestRequested(item, parentItem);
+            } else if (e.ctrlKey && e.key === 'd') {
+              e.preventDefault();
 
-              if (e.shiftKey) {
-                onUnnestRequested?.(item, true);
-              } else {
-                onNestRequested?.(item);
-              }
+              onNestRequested(item);
             }
           }}
         />
-        <Button
-          className="shrink-0 mx-4"
-          variant="destructive"
-          size="icon"
-          tabIndex={-1}
-          disabled={blank}
-          onClick={() => onDelete?.(item)}
-        >
-          <Flame />
-        </Button>
+        <div className="flex gap-2 mx-2">
+          <div className="hidden sm:flex">
+            <Button
+              className="rounded-r-none border-r border-r-black/30 pl-2"
+              tabIndex={-1}
+              size="slimIcon"
+              disabled={isUnnestDisabled}
+              onClick={() => onUnnestRequested(item, parentItem)}
+            >
+              <ArrowLeftToLine />
+            </Button>
+            <Button
+              className="rounded-l-none pr-2"
+              tabIndex={-1}
+              size="slimIcon"
+              disabled={isNestDisabled}
+              onClick={() => onNestRequested(item)}
+            >
+              <ArrowRightToLine />
+            </Button>
+          </div>
+          <Button
+            className="shrink-0"
+            variant="destructive"
+            size="icon"
+            tabIndex={-1}
+            disabled={blank}
+            onClick={() => onDelete?.(item)}
+          >
+            <Flame />
+          </Button>
+        </div>
       </div>
       {item.subItems.length > 0 && (
         <div className="flex flex-col gap-2 bg-white/10 py-2 sm:py-0 sm:bg-transparent sm:ml-11">
@@ -131,6 +173,7 @@ export function ListItem({
             blank
           />
           <ListItems
+            parentItem={item}
             items={item.subItems}
             onChange={(updatedItems) => {
               onSubmit({
@@ -138,9 +181,7 @@ export function ListItem({
                 subItems: updatedItems,
               });
             }}
-            onUnnestRequested={(updatedItem) => {
-              onUnnestRequested?.(updatedItem, false);
-            }}
+            onUnnest={onUnnest}
           />
         </div>
       )}
