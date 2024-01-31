@@ -1,6 +1,6 @@
 import { Todo } from '@/storage';
 import { describe, expect, it } from 'vitest';
-import { isDone, setDone } from '../items';
+import { getStatusCount, isDone, setDone } from '../items';
 
 describe('Item Utils', () => {
   describe('fn(isDone)', () => {
@@ -112,6 +112,125 @@ describe('Item Utils', () => {
           done: true,
         },
       ]);
+    });
+  });
+
+  describe('fn(getStatusCount)', () => {
+    it('should support a simple item being done', () => {
+      expect(
+        getStatusCount({
+          id: '',
+          label: '',
+          done: true,
+          subItems: [],
+        })
+      ).toEqual({
+        done: 1,
+        total: 1,
+      });
+    });
+
+    it('should support a simple item not being done', () => {
+      expect(
+        getStatusCount({
+          id: '',
+          label: '',
+          done: false,
+          subItems: [],
+        })
+      ).toEqual({
+        done: 0,
+        total: 1,
+      });
+    });
+
+    it('should support nested items', () => {
+      expect(
+        getStatusCount({
+          id: '',
+          label: '',
+          done: true,
+          subItems: [
+            {
+              id: '',
+              label: '',
+              done: true,
+              subItems: [],
+            },
+            {
+              id: '',
+              label: '',
+              done: true,
+              subItems: [],
+            },
+          ],
+        })
+      ).toEqual({
+        done: 2,
+        total: 2,
+      });
+    });
+
+    it('should support partially completed nested items', () => {
+      expect(
+        getStatusCount({
+          id: '',
+          label: '',
+          done: false,
+          subItems: [
+            {
+              id: '',
+              label: '',
+              done: false,
+              subItems: [],
+            },
+            {
+              id: '',
+              label: '',
+              done: true,
+              subItems: [],
+            },
+          ],
+        })
+      ).toEqual({
+        done: 1,
+        total: 2,
+      });
+    });
+
+    it('should support complex lists', () => {
+      expect(
+        getStatusCount([
+          {
+            id: '',
+            label: '',
+            done: true,
+            subItems: [
+              {
+                id: '',
+                label: '',
+                done: true,
+                subItems: [],
+              },
+              {
+                id: '',
+                label: '',
+                done: true,
+                subItems: [],
+              },
+            ],
+          },
+          {
+            id: '',
+            label: '',
+            done: true,
+            subItems: [],
+          },
+        ])
+      ).toEqual({
+        done: 3,
+        total: 3,
+      });
     });
   });
 });
