@@ -17,7 +17,7 @@ export type ListItemProps = {
   onChange: (item: Todo.Item) => void;
   onDelete?: (item: Todo.Item) => void;
   onNestRequested?: (item: Todo.Item) => void;
-  onUnnestRequested?: (item: Todo.Item) => void;
+  onUnnestRequested?: (item: Todo.Item, source: boolean) => void;
 };
 
 export function ListItem({
@@ -66,6 +66,7 @@ export function ListItem({
         <div className="flex aspect-square h-[100%] items-center justify-center">
           <Checkbox
             className="shrink-0"
+            tabIndex={-1}
             checked={done}
             disabled={blank}
             onClick={() => {
@@ -93,7 +94,7 @@ export function ListItem({
               if (blank) return;
 
               if (e.shiftKey) {
-                onUnnestRequested?.(item);
+                onUnnestRequested?.(item, true);
               } else {
                 onNestRequested?.(item);
               }
@@ -130,6 +131,9 @@ export function ListItem({
                 ...item,
                 subItems: updatedItems,
               });
+            }}
+            onUnnestRequested={(updatedItem) => {
+              onUnnestRequested?.(updatedItem, false);
             }}
           />
         </div>

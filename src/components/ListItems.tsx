@@ -5,9 +5,10 @@ import { LoaderFunctionArgs, redirect } from 'react-router-dom';
 export type ListItemsProps = {
   items: Todo.Item[];
   onChange: (updatedItems: Todo.Item[]) => void;
+  onUnnestRequested?: (updatedItem: Todo.Item, source: boolean) => void;
 };
 
-export function ListItems({ items, onChange }: ListItemsProps) {
+export function ListItems({ items, onChange, onUnnestRequested }: ListItemsProps) {
   return (
     <>
       {items.map((item, i) => (
@@ -47,22 +48,20 @@ export function ListItems({ items, onChange }: ListItemsProps) {
                 })
             );
           }}
-          onUnnestRequested={(updatedItem) => {
-            // const previousItem = items[i - 1];
-            // if (!previousItem) return;
-            // onChange(
-            //   items
-            //     .filter((item) => item.id !== updatedItem.id)
-            //     .map((item) => {
-            //       if (item.id !== previousItem.id) return item;
-            //       const subItems = item.subItems ?? [];
-            //       subItems.push(item);
-            //       return {
-            //         ...item,
-            //         subItems,
-            //       };
-            //     })
-            // );
+          onUnnestRequested={(updatedItem, source) => {
+            if (source) {
+              onUnnestRequested?.(updatedItem, source);
+            } else {
+              onChange([
+                ...items.slice(0, i),
+                {
+                  ...item,
+                  subItems: item.subItems.filter(({ id }) => id !== updatedItem.id),
+                },
+                updatedItem,
+                ...items.slice(i + 1),
+              ]);
+            }
           }}
         />
       ))}
