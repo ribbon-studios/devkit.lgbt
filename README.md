@@ -4,16 +4,20 @@
 
 ### Apps
 
-Devkit has two versions of the app both based upon the same source code.
+Devkit has two versions of the app both based upon the same source code, but with slightly different release cadences.
 
 #### Web App
 
 It has a web app that's hosted at https://devkit.lgbt.
 This is hosted via GitHub Pages and will **NEVER** make _any_ external requests.
 
+Releases occur every time a change is made to the **main** branch of the repo.
+
 #### Native App
 
 See [Releases](https://github.com/rain-cafe/devkit.lgbt/releases/latest)!
+
+Releases occur every time a tag is pushed to the repo.
 
 **We currently build versions of the app for:**
 
