@@ -3,7 +3,7 @@ import { refocus } from '../dom';
 
 describe('Dom Utils', () => {
   describe('fn(refocus)', () => {
-    it('should refocus the element...', async () => {
+    it('should refocus the element', async () => {
       vi.spyOn(window, 'requestAnimationFrame').mockImplementation((fn) => {
         setTimeout(() => fn(0));
 
@@ -22,6 +22,14 @@ describe('Dom Utils', () => {
       await promise;
 
       expect(element.focus).toHaveBeenCalledTimes(1);
+    });
+
+    it('should do nothing if no element is specified', async () => {
+      vi.spyOn(window, 'requestAnimationFrame');
+
+      await refocus();
+
+      expect(window.requestAnimationFrame).not.toHaveBeenCalled();
     });
   });
 });

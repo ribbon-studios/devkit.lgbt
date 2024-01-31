@@ -1,13 +1,13 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { refocus } from '@/lib/dom';
-import { isDone, setDone } from '@/lib/items';
+import { hasNotChanged, isDone, setDone } from '@/lib/items';
 import { cn } from '@/lib/utils';
 import { Todo } from '@/storage';
 import { createId } from '@paralleldrive/cuid2';
 import { useCachedState } from '@rain-cafe/react-utils';
 import { Flame } from 'lucide-react';
-import { useMemo } from 'react';
+import { SyntheticEvent, useMemo } from 'react';
 import { ListItems } from './ListItems';
 import { Button } from './ui/button';
 
@@ -46,8 +46,8 @@ export function ListItem({
 
   if (!item) return null;
 
-  const onSubmit = (updatedItem: Todo.Item) => {
-    if (!updatedItem.label || externalItem === item) return;
+  const onSubmit = (updatedItem: Todo.Item, e?: SyntheticEvent<HTMLElement>) => {
+    if (!updatedItem.label || hasNotChanged(updatedItem, externalItem)) return;
 
     onChange(updatedItem);
 
@@ -58,6 +58,8 @@ export function ListItem({
         done: false,
         subItems: [],
       });
+
+      refocus(e?.currentTarget);
     } else {
       setItem(updatedItem);
     }
@@ -88,16 +90,10 @@ export function ListItem({
               label: e.target.value,
             });
           }}
-          onBlur={(e) => {
-            onSubmit(item);
-
-            if (blank) refocus(e.currentTarget);
-          }}
+          onBlur={(e) => onSubmit(item, e)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              onSubmit(item);
-
-              if (blank) refocus(e.currentTarget);
+              onSubmit(item, e);
             } else if (e.key === 'Tab') {
               e.preventDefault();
 
