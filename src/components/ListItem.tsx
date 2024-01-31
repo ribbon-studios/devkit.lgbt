@@ -62,15 +62,17 @@ export function ListItem({
 
   return (
     <>
-      <div className={'flex gap-4 items-center'}>
-        <Checkbox
-          className="shrink-0"
-          checked={done}
-          disabled={blank}
-          onClick={() => {
-            onSubmit(setDone(item, !done));
-          }}
-        />
+      <div className={'flex items-center'}>
+        <div className="flex aspect-square h-[100%] items-center justify-center">
+          <Checkbox
+            className="shrink-0"
+            checked={done}
+            disabled={blank}
+            onClick={() => {
+              onSubmit(setDone(item, !done));
+            }}
+          />
+        </div>
         <Input
           className={cn(done && 'line-through')}
           placeholder={placeholder}
@@ -99,7 +101,7 @@ export function ListItem({
           }}
         />
         <Button
-          className="shrink-0"
+          className="shrink-0 mx-4"
           variant="destructive"
           size="icon"
           tabIndex={-1}
@@ -110,7 +112,7 @@ export function ListItem({
         </Button>
       </div>
       {item.subItems.length > 0 && (
-        <div className="flex flex-col gap-2 ml-11">
+        <div className="flex flex-col gap-2 bg-white/10 py-2 sm:py-0 sm:bg-transparent sm:ml-11">
           <ListItem
             placeholder="Add a new item..."
             onChange={(newItem) => {

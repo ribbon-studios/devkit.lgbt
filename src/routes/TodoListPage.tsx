@@ -36,22 +36,24 @@ export function TodoListPage() {
         <div>&gt;</div>
         <div className="truncate">{list.label}</div>
       </PageHeader>
-      <PageContent>
-        <div className="flex items-center gap-4">
-          <Checkbox
-            className="shrink-0"
-            checked={allDone}
-            disabled={list.items.length === 0}
-            onClick={() => {
-              onChange({
-                ...list,
-                items: list.items.map((item) => ({
-                  ...item,
-                  done: !allDone,
-                })),
-              });
-            }}
-          />
+      <PageContent className="px-0">
+        <div className="flex items-center">
+          <div className="flex h-[100%] aspect-square items-center justify-center">
+            <Checkbox
+              className="shrink-0"
+              checked={allDone}
+              disabled={list.items.length === 0}
+              onClick={() => {
+                onChange({
+                  ...list,
+                  items: list.items.map((item) => ({
+                    ...item,
+                    done: !allDone,
+                  })),
+                });
+              }}
+            />
+          </div>
           <Input
             value={list.label}
             onChange={(e) =>
@@ -68,7 +70,7 @@ export function TodoListPage() {
               await Storage.delete(StorageKeys.LISTS, list.id);
             }}
           >
-            <Button className="shrink-0" variant="destructive" size="icon">
+            <Button className="shrink-0 mx-4" variant="destructive" size="icon">
               <Flame />
             </Button>
           </ConfirmDialog>
