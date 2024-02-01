@@ -8,8 +8,8 @@ import { Storage, StorageKeys } from '@/storage';
 import { IStorage } from '@/storage/base';
 import { Download, Flame, Import } from 'lucide-react';
 import { useState } from 'react';
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/prism-light';
 import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 SyntaxHighlighter.registerLanguage('json', json);
