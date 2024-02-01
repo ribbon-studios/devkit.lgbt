@@ -36,6 +36,7 @@ export class Storage {
         {
           [StorageKeys.LISTS]: [],
           [StorageKeys.NOTES]: [],
+          [StorageKeys.SETTINGS]: [],
         }
       );
     }
@@ -48,6 +49,7 @@ export class Storage {
       {
         [StorageKeys.LISTS]: '[]',
         [StorageKeys.NOTES]: '[]',
+        [StorageKeys.SETTINGS]: '[]',
       }
     );
   }

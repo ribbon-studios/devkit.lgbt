@@ -1,23 +1,34 @@
-import { Database, Hash, ListTodo, LucideIcon, NotebookText } from 'lucide-react';
+import { Database, Hash, ListTodo, LucideIcon, NotebookText, Settings } from 'lucide-react';
 import { LazyRouteFunction, LoaderFunction, RouteObject } from 'react-router-dom';
+
+export enum RouteID {
+  NOTES,
+  TODO,
+  HASHING,
+  DATA,
+  SETTINGS,
+}
 
 /**
  * Routes that appear at the top of the header
  */
 export const ROUTES: Route[] = [
   {
+    id: RouteID.NOTES,
     path: '/notes',
     lazy: () => import('./NotesPage'),
     icon: NotebookText,
     label: 'Notes',
   },
   {
+    id: RouteID.TODO,
     path: '/todo',
     lazy: () => import('./TodoListsPage'),
     icon: ListTodo,
     label: 'Todo List',
   },
   {
+    id: RouteID.HASHING,
     path: '/hash',
     lazy: () => import('./HashingPage'),
     icon: Hash,
@@ -30,10 +41,18 @@ export const ROUTES: Route[] = [
  */
 export const SUB_ROUTES: Route[] = [
   {
+    id: RouteID.DATA,
     path: '/data',
     lazy: () => import('./DataPage'),
     icon: Database,
     label: 'View Data',
+  },
+  {
+    id: RouteID.SETTINGS,
+    path: '/settings',
+    lazy: () => import('./SettingsPage'),
+    icon: Settings,
+    label: 'Settings',
   },
 ];
 
@@ -62,6 +81,7 @@ const routeToReactRoute = ({ path, element: Element, loader, children, lazy }: R
 export const REACT_ROUTES: RouteObject[] = [...ROUTES, ...SUB_ROUTES, ...NESTED_ROUTES].map(routeToReactRoute);
 
 export type Route = {
+  id: RouteID;
   path: string;
   loader?: LoaderFunction<any>;
   icon: LucideIcon;
@@ -78,4 +98,4 @@ export type Route = {
     }
 );
 
-export type NestedRoute = Omit<Route, 'icon' | 'label'>;
+export type NestedRoute = Omit<Route, 'icon' | 'label' | 'id'>;

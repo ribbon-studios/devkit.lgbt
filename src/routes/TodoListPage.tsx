@@ -1,8 +1,8 @@
 import { ConfirmDialog } from '@/components/ConfirmDialog';
-import { ListItem } from '@/components/ListItem';
-import { ListItems } from '@/components/ListItems';
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
+import { ListItem } from '@/components/todo/ListItem';
+import { ListItems } from '@/components/todo/ListItems';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
