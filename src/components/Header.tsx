@@ -1,10 +1,13 @@
+import { cn } from '@/lib/utils';
 import { ROUTES, Route, RouteID, SUB_ROUTES } from '@/routes';
-import { selectSettingsRoutes } from '@/slices/settings.slice';
+import { LoadingKey, isLoading } from '@/slices/loading.slice';
+import { selectDeveloperSetting, selectSettingsRoutes } from '@/slices/settings.slice';
 import { useAppSelector } from '@/slices/state';
 import { Bug, Code, LucideIcon } from 'lucide-react';
 import { useMemo, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { ButtonIcon } from './ButtonIcon';
+import { Skeleton } from './ui/skeleton';
 
 export type HeaderProps = {
   children: ReactNode;
@@ -13,7 +16,11 @@ export type HeaderProps = {
 export const ITEMS: (Route | 'split')[] = [...ROUTES, 'split', ...SUB_ROUTES];
 
 export function Header({ children }: HeaderProps) {
+  const loading = useAppSelector(isLoading(LoadingKey.SETTINGS));
   const routes = useAppSelector(selectSettingsRoutes);
+  const skeletons = useAppSelector(selectDeveloperSetting('skeletons'));
+  const skeletonHideContent = useAppSelector(selectDeveloperSetting('skeletonHideContent'));
+
   const activeItems = useMemo(
     () => ITEMS.filter((item) => typeof item === 'string' || item.id === RouteID.SETTINGS || routes.includes(item.id)),
     [ITEMS, routes]
@@ -32,17 +39,49 @@ export function Header({ children }: HeaderProps) {
         >
           D<span className="hidden sm:inline">evkit</span>
         </Link>
-        {activeItems.map((item, index) => {
-          if (item === 'split') {
-            return <div key={index} className="flex-1" />;
-          }
+        <div className="relative flex flex-col gap-2 flex-1">
+          <div
+            className={cn(
+              'absolute inset-0 hidden flex-col gap-2 pointer-events-none',
+              (loading || skeletons) && 'flex'
+            )}
+          >
+            <div className="flex items-center gap-2 m-2">
+              <Skeleton className="size-6" />
+              <Skeleton className="h-4 sm:w-16 rounded-full" />
+            </div>
+            <div className="flex items-center gap-2 m-2">
+              <Skeleton className="size-6" />
+              <Skeleton className="h-4 sm:w-24 rounded-full" />
+            </div>
+            <div className="flex items-center gap-2 m-2">
+              <Skeleton className="size-6" />
+              <Skeleton className="h-4 sm:w-20 rounded-full" />
+            </div>
+            <div className="flex-1" />
+            <div className="flex items-center gap-2 m-2">
+              <Skeleton className="size-6" />
+              <Skeleton className="h-4 sm:w-24 rounded-full" />
+            </div>
+            <div className="flex items-center gap-2 m-2">
+              <Skeleton className="size-6" />
+              <Skeleton className="h-4 sm:w-20 rounded-full" />
+            </div>
+          </div>
+          {!loading &&
+            !skeletonHideContent &&
+            activeItems.map((item, index) => {
+              if (item === 'split') {
+                return <div key={index} className="flex-1" />;
+              }
 
-          return (
-            <ButtonIcon key={index} icon={item.icon} to={item.path} variant="ghost">
-              {item.label}
-            </ButtonIcon>
-          );
-        })}
+              return (
+                <ButtonIcon key={index} icon={item.icon} to={item.path} variant="ghost">
+                  {item.label}
+                </ButtonIcon>
+              );
+            })}
+        </div>
         <ButtonIcon icon={Bug} to="https://github.com/rain-cafe/devkit.lgbt/issues" variant="ghost">
           Report an Issue
         </ButtonIcon>
