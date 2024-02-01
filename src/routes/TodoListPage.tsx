@@ -15,7 +15,17 @@ import { useMemo } from 'react';
 import { Link, LoaderFunctionArgs, Navigate, redirect, useLoaderData } from 'react-router-dom';
 import { useIsFirstRender } from 'usehooks-ts';
 
-export function TodoListPage() {
+export async function loader({ params }: LoaderFunctionArgs<any>) {
+  if (!params.id) return redirect('/');
+
+  const list = await Storage.get(StorageKeys.LISTS, params.id);
+
+  if (!list) return redirect('/todo');
+
+  return list;
+}
+
+export function Component() {
   const isFirstRender = useIsFirstRender();
   const externalList = useLoaderData() as Todo.List;
   const [list, setList] = useCachedState<Todo.List>(() => externalList, [externalList]);
@@ -102,14 +112,4 @@ export function TodoListPage() {
   );
 }
 
-export namespace TodoListPage {
-  export async function loader({ params }: LoaderFunctionArgs<any>) {
-    if (!params.id) return redirect('/');
-
-    const list = await Storage.get(StorageKeys.LISTS, params.id);
-
-    if (!list) return redirect('/todo');
-
-    return list;
-  }
-}
+Component.displayName = 'TodoListPage';

@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
 import { REACT_ROUTES } from './routes';
-import { ErrorPage } from './routes/ErrorPage';
-import { Root } from './routes/Root';
 import { IStorage, Storage } from './storage';
 
 export function hook(storage: IStorage) {
@@ -14,8 +12,7 @@ export function hook(storage: IStorage) {
   const router = createHashRouter([
     {
       path: '/',
-      element: <Root />,
-      errorElement: <ErrorPage />,
+      lazy: () => import('./routes/Root'),
       children: REACT_ROUTES,
     },
   ]);

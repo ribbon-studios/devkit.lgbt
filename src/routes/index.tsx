@@ -1,11 +1,5 @@
 import { Database, Hash, ListTodo, LucideIcon, NotebookText } from 'lucide-react';
-import { LoaderFunction, RouteObject } from 'react-router-dom';
-import { DataPage } from './DataPage';
-import { HashingPage } from './HashingPage';
-import { NotePage } from './NotePage';
-import { NotesPage } from './NotesPage';
-import { TodoListPage } from './TodoListPage';
-import { TodoListsPage } from './TodoListsPage';
+import { LazyRouteFunction, LoaderFunction, RouteObject } from 'react-router-dom';
 
 /**
  * Routes that appear at the top of the header
@@ -13,21 +7,19 @@ import { TodoListsPage } from './TodoListsPage';
 export const ROUTES: Route[] = [
   {
     path: '/notes',
-    element: NotesPage,
-    loader: NotesPage.loader,
+    lazy: () => import('./NotesPage'),
     icon: NotebookText,
     label: 'Notes',
   },
   {
     path: '/todo',
-    element: TodoListsPage,
-    loader: TodoListsPage.loader,
+    lazy: () => import('./TodoListsPage'),
     icon: ListTodo,
     label: 'Todo List',
   },
   {
     path: '/hash',
-    element: HashingPage,
+    lazy: () => import('./HashingPage'),
     icon: Hash,
     label: 'Hashing',
   },
@@ -39,8 +31,7 @@ export const ROUTES: Route[] = [
 export const SUB_ROUTES: Route[] = [
   {
     path: '/data',
-    element: DataPage,
-    loader: DataPage.loader,
+    lazy: () => import('./DataPage'),
     icon: Database,
     label: 'View Data',
   },
@@ -52,32 +43,39 @@ export const SUB_ROUTES: Route[] = [
 export const NESTED_ROUTES: NestedRoute[] = [
   {
     path: '/todo/:id',
-    element: TodoListPage,
-    loader: TodoListPage.loader,
+    lazy: () => import('./TodoListPage'),
   },
   {
     path: '/notes/:id',
-    element: NotePage,
-    loader: NotePage.loader,
+    lazy: () => import('./NotePage'),
   },
 ];
 
-const routeToReactRoute = ({ path, element: Element, loader, children }: Route | NestedRoute): RouteObject => ({
+const routeToReactRoute = ({ path, element: Element, loader, children, lazy }: Route | NestedRoute): RouteObject => ({
   path,
-  element: <Element />,
+  element: Element ? <Element /> : undefined,
   loader,
   children: children?.map(routeToReactRoute),
+  lazy,
 });
 
 export const REACT_ROUTES: RouteObject[] = [...ROUTES, ...SUB_ROUTES, ...NESTED_ROUTES].map(routeToReactRoute);
 
 export type Route = {
   path: string;
-  element: React.ElementType;
   loader?: LoaderFunction<any>;
   icon: LucideIcon;
   label: string;
   children?: NestedRoute[];
-};
+} & (
+  | {
+      element: React.ElementType;
+      lazy?: never;
+    }
+  | {
+      element?: never;
+      lazy: LazyRouteFunction<RouteObject>;
+    }
+);
 
 export type NestedRoute = Omit<Route, 'icon' | 'label'>;

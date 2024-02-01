@@ -19,7 +19,11 @@ const KEY_TO_LABEL: Record<StorageKeys, string> = {
   [StorageKeys.NOTES]: 'Notes',
 };
 
-export function DataPage() {
+export async function loader(): Promise<IStorage.Data> {
+  return await Storage.everything();
+}
+
+export function Component() {
   const noClipboardWrite = !navigator.clipboard || !navigator.clipboard.writeText;
   const noClipboardRead = !navigator.clipboard || !navigator.clipboard.readText;
   const [data, setData] = useBetterLoaderData<IStorage.Data>();
@@ -104,8 +108,4 @@ export function DataPage() {
   );
 }
 
-export namespace DataPage {
-  export async function loader(): Promise<IStorage.Data> {
-    return await Storage.everything();
-  }
-}
+Component.displayName = 'DataPage';

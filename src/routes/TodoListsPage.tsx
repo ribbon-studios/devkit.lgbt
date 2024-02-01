@@ -8,7 +8,11 @@ import { useCachedState } from '@rain-cafe/react-utils';
 import { BadgePlus } from 'lucide-react';
 import { useLoaderData } from 'react-router-dom';
 
-export function TodoListsPage() {
+export async function loader() {
+  return await Storage.get(StorageKeys.LISTS);
+}
+
+export function Component() {
   const externalList = useLoaderData() as Todo.List[];
   const [lists, setLists] = useCachedState<Todo.List[]>(() => externalList, [externalList]);
 
@@ -61,8 +65,4 @@ export function TodoListsPage() {
   );
 }
 
-export namespace TodoListsPage {
-  export async function loader() {
-    return await Storage.get(StorageKeys.LISTS);
-  }
-}
+Component.displayName = 'TodoListsPage';

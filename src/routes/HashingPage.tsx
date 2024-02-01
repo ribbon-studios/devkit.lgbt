@@ -33,7 +33,7 @@ const algorithms: Combobox.Option<HashingAlgorithm>[] = [
   },
 ];
 
-export function HashingPage() {
+export function Component() {
   const [value, setValue] = useState('');
   const [algorithm, setAlgorithm] = useState<HashingAlgorithm>();
   const output = useSubtleCrypto(algorithm, value, '');
