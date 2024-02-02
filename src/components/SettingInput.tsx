@@ -13,7 +13,7 @@ export type SettingInputProps = {
 
 export function SettingInput({ icon: Icon, label, description, children, className }: SettingInputProps) {
   return (
-    <div className={cn('flex gap-4', description ? 'items-end' : 'items-center', className)}>
+    <div className={cn('flex gap-4 w-max', description ? 'items-end' : 'items-center', className)}>
       <div className="flex flex-col gap-1 flex-1">
         <Label className="flex gap-2 text-sm items-center">
           {Icon && <Icon size={20} />}
