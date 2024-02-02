@@ -2,7 +2,7 @@ import { ButtonIcon } from '@/components/ButtonIcon';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
-import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useBetterLoaderData } from '@/hooks/use-loader-data';
 import { Storage, StorageKeys } from '@/storage';
 import { IStorage } from '@/storage/base';
@@ -17,6 +17,7 @@ SyntaxHighlighter.registerLanguage('json', json);
 const KEY_TO_LABEL: Record<StorageKeys, string> = {
   [StorageKeys.LISTS]: 'Todo Lists',
   [StorageKeys.NOTES]: 'Notes',
+  [StorageKeys.SETTINGS]: 'Settings',
 };
 
 export async function loader(): Promise<IStorage.Data> {
@@ -86,21 +87,31 @@ export function Component() {
           </ConfirmDialog>
         </div>
       </PageHeader>
-      <PageContent className="gap-4">
-        <div className="flex border rounded-md p-2 gap-2">
-          {Object.values(StorageKeys).map((key) => (
-            <Button
-              key={key}
-              size="sm"
-              variant={dataKey === key ? 'default' : 'ghost'}
-              onClick={() => setDataKey(key as StorageKeys)}
-            >
-              {KEY_TO_LABEL[key as StorageKeys]}
-            </Button>
-          ))}
-        </div>
-        <h2 className="text-xl leading-none">JSON</h2>
-        <SyntaxHighlighter language="json" style={a11yDark} customStyle={{ marginTop: 0 }}>
+      <PageContent className="gap-0">
+        <Tabs
+          value={dataKey}
+          onValueChange={(tab) => {
+            setDataKey(tab as StorageKeys);
+          }}
+        >
+          <TabsList className="border-b border-b-black/50 grid w-full grid-flow-col-dense rounded-b-none">
+            {Object.values(StorageKeys).map((key) => (
+              <TabsTrigger key={key} value={key}>
+                {KEY_TO_LABEL[key]}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+        <SyntaxHighlighter
+          language="json"
+          style={a11yDark}
+          customStyle={{
+            background: 'hsl(var(--muted))',
+            borderTopLeftRadius: 0,
+            borderTopRightRadius: 0,
+            marginTop: 0,
+          }}
+        >
           {JSON.stringify(data[dataKey], null, 4)}
         </SyntaxHighlighter>
       </PageContent>
