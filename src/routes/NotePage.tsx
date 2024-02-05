@@ -1,6 +1,6 @@
+import { MilkdownEditorWrapper } from '@/components/MarkdownEditor';
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
-import { Textarea } from '@/components/ui/textarea';
 import { useBetterLoaderData } from '@/hooks/use-loader-data';
 import { Notes, Storage, StorageKeys } from '@/storage';
 import { Link, LoaderFunctionArgs, redirect } from 'react-router-dom';
@@ -34,7 +34,17 @@ export function Component() {
         <div className="truncate">{name}</div>
       </PageHeader>
       <PageContent>
-        <Textarea
+        <MilkdownEditorWrapper
+          className="flex-1"
+          value={note.text}
+          onChange={(value) => {
+            onChange({
+              ...note,
+              text: value,
+            });
+          }}
+        />
+        {/* <Textarea
           className="flex-1 resize-none"
           value={note.text}
           onKeyDown={(e) => {
@@ -55,7 +65,7 @@ export function Component() {
               text: e.target.value,
             })
           }
-        />
+        /> */}
       </PageContent>
     </>
   );

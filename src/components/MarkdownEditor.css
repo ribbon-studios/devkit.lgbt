@@ -1,0 +1,10 @@
+[data-milkdown-root='true'] {
+  display: flex;
+  flex: 1;
+
+  > .milkdown {
+    display: inherit;
+    flex: inherit;
+    width: 100%;
+  }
+}
