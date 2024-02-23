@@ -8,7 +8,11 @@ import { createId } from '@paralleldrive/cuid2';
 import { BadgePlus, Flame, NotebookText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export function NotesPage() {
+export async function loader() {
+  return await Storage.get(StorageKeys.NOTES);
+}
+
+export function Component() {
   const [notes, setNotes] = useBetterLoaderData<Notes.List[]>();
 
   if (!notes) return null;
@@ -70,8 +74,4 @@ export function NotesPage() {
   );
 }
 
-export namespace NotesPage {
-  export async function loader() {
-    return await Storage.get(StorageKeys.NOTES);
-  }
-}
+Component.displayName = 'NotesPage';
