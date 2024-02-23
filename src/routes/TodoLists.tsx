@@ -1,3 +1,4 @@
+import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
 import { Button } from '@/components/ui/button';
@@ -59,16 +60,17 @@ export function TodoLists() {
                 <div className="flex bg-secondary h-10 px-4 items-center justify-center rounded-md">
                   {items.length} Items
                 </div>
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  onClick={() => {
+                <ConfirmDialog
+                  description="This action cannot be undone. This will permanently this list."
+                  onSubmit={async () => {
                     setLists(lists.filter((list) => list.id !== id));
-                    Storage.delete(Storage.Keys.LISTS, id);
+                    await Storage.delete(Storage.Keys.LISTS, id);
                   }}
                 >
-                  <Flame />
-                </Button>
+                  <Button className="shrink-0" variant="destructive" size="icon">
+                    <Flame />
+                  </Button>
+                </ConfirmDialog>
               </div>
             ))}
           </>
