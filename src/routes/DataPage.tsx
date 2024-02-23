@@ -1,10 +1,9 @@
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { useBetterLoaderData } from '@/hooks/use-loader-data';
 import { Storage } from '@/storage';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
 import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -18,7 +17,8 @@ const KEY_TO_LABEL: Record<Storage.Keys, string> = {
 export function DataPage() {
   const noClipboardWrite = !navigator.clipboard || !navigator.clipboard.writeText;
   const noClipboardRead = !navigator.clipboard || !navigator.clipboard.readText;
-  const [data, setData] = useBetterLoaderData<Storage.Data.Raw>();
+  const [data, setData] = useBetterLoaderData<Storage.Data>();
+  const [dataKey, setDataKey] = useState(Storage.Keys.LISTS);
   const [loading, setLoading] = useState(false);
 
   const onClear = async () => {
@@ -27,7 +27,7 @@ export function DataPage() {
     try {
       await Storage.clear();
 
-      setData(await Storage.everything(true));
+      setData(await Storage.everything());
     } finally {
       setLoading(false);
     }
@@ -41,7 +41,7 @@ export function DataPage() {
       const data: Storage.Data = Storage.convert(JSON.parse(atob(text)) as Storage.Data.Raw);
 
       await Storage.load(data);
-      setData(await Storage.everything(true));
+      setData(await Storage.everything());
     } catch (error) {
       console.error(error);
     } finally {
@@ -71,22 +71,25 @@ export function DataPage() {
           </Button>
         </div>
       </PageHeader>
-      <PageContent>
-        {Object.keys(data).map((key) => (
-          <Fragment key={key}>
-            <Label htmlFor={key}>{KEY_TO_LABEL[key]}</Label>
-            <SyntaxHighlighter language="json" style={a11yDark}>
-              {data[key]}
-            </SyntaxHighlighter>
-          </Fragment>
-        ))}
+      <PageContent className="gap-4">
+        <div className="flex border rounded-md p-2">
+          {Object.keys(data).map((key: Storage.Keys) => (
+            <Button key={key} size="sm" variant={dataKey === key ? 'default' : 'ghost'} onClick={() => setDataKey(key)}>
+              {KEY_TO_LABEL[key]}
+            </Button>
+          ))}
+        </div>
+        <h2 className="text-xl leading-none">JSON</h2>
+        <SyntaxHighlighter language="json" style={a11yDark} customStyle={{ marginTop: 0 }}>
+          {JSON.stringify(data[dataKey], null, 4)}
+        </SyntaxHighlighter>
       </PageContent>
     </>
   );
 }
 
 export namespace DataPage {
-  export async function loader(): Promise<Storage.Data.Raw> {
-    return await Storage.everything(true);
+  export async function loader(): Promise<Storage.Data> {
+    return await Storage.everything();
   }
 }
