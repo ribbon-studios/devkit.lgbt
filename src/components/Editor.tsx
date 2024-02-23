@@ -101,8 +101,12 @@ export function DevkitEditor({ initialValue: externalInitialValue, onChange, ...
   });
 
   return (
-    <div {...props} id="bangle-editor">
-      <BangleEditor state={editorState} onReady={(editor) => editor.view.state.doc} />
+    <div {...props} className="flex flex-1" id="bangle-editor">
+      <BangleEditor
+        className="flex-1 grid grid-cols-1"
+        state={editorState}
+        onReady={(editor) => editor.view.state.doc}
+      />
     </div>
   );
 }

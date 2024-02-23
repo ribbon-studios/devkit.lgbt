@@ -36,7 +36,6 @@ export function Component() {
       </PageHeader>
       <PageContent>
         <DevkitEditor
-          className="flex-1"
           initialValue={note.text}
           onChange={(value) => {
             onChange({
