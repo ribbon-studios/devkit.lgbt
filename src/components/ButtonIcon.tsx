@@ -23,7 +23,7 @@ export function ButtonIcon({ children, className, icon: Icon, href, ...props }: 
 
   return (
     <Button
-      className={cn('flex gap-2 p-0 size-10 sm:w-fit sm:px-3 items-center justify-center', className)}
+      className={cn('flex gap-2 p-0 size-10 sm:w-auto sm:px-3 items-center justify-center', className)}
       size="sm"
       asChild={Boolean(href)}
       {...props}
