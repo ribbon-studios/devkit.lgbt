@@ -1,6 +1,8 @@
-import { ROUTES, SUB_ROUTES } from '@/routes';
+import { ROUTES, Route, RouteID, SUB_ROUTES } from '@/routes';
+import { selectSettingsRoutes } from '@/slices/settings.slice';
+import { useAppSelector } from '@/slices/state';
 import { Bug, Code, LucideIcon } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { ButtonIcon } from './ButtonIcon';
 
@@ -8,23 +10,15 @@ export type HeaderProps = {
   children: ReactNode;
 };
 
-const additionalItems = [
-  ...SUB_ROUTES,
-  ...([
-    {
-      path: 'https://github.com/rain-cafe/devkit.lgbt/issues',
-      label: 'Report an Issue',
-      icon: Bug,
-    },
-    {
-      path: 'https://github.com/rain-cafe/devkit.lgbt',
-      label: 'Source Code',
-      icon: Code,
-    },
-  ] as Header.Item[]),
-];
+export const ITEMS: (Route | 'split')[] = [...ROUTES, 'split', ...SUB_ROUTES];
 
 export function Header({ children }: HeaderProps) {
+  const routes = useAppSelector(selectSettingsRoutes);
+  const activeItems = useMemo(
+    () => ITEMS.filter((item) => typeof item === 'string' || item.id === RouteID.SETTINGS || routes.includes(item.id)),
+    [ITEMS, routes]
+  );
+
   return (
     <div className="flex min-h-dvh max-h-dvh">
       <div
@@ -38,17 +32,23 @@ export function Header({ children }: HeaderProps) {
         >
           D<span className="hidden sm:inline">evkit</span>
         </Link>
-        {ROUTES.map((item, index) => (
-          <ButtonIcon key={index} icon={item.icon} to={item.path} variant="ghost">
-            {item.label}
-          </ButtonIcon>
-        ))}
-        <div className="flex-1" />
-        {additionalItems.map((item, index) => (
-          <ButtonIcon key={index} icon={item.icon} to={item.path} variant="ghost">
-            {item.label}
-          </ButtonIcon>
-        ))}
+        {activeItems.map((item, index) => {
+          if (item === 'split') {
+            return <div key={index} className="flex-1" />;
+          }
+
+          return (
+            <ButtonIcon key={index} icon={item.icon} to={item.path} variant="ghost">
+              {item.label}
+            </ButtonIcon>
+          );
+        })}
+        <ButtonIcon icon={Bug} to="https://github.com/rain-cafe/devkit.lgbt/issues" variant="ghost">
+          Report an Issue
+        </ButtonIcon>
+        <ButtonIcon icon={Code} to="https://github.com/rain-cafe/devkit.lgbt" variant="ghost">
+          Source Code
+        </ButtonIcon>
       </div>
       <div className="flex flex-1 flex-col overflow-auto">{children}</div>
     </div>

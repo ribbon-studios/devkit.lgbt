@@ -1,3 +1,5 @@
+import type { SettingsState } from '@/slices/settings.slice';
+
 export namespace Todo {
   export type List = {
     id: string;
@@ -20,6 +22,10 @@ export namespace Notes {
   };
 }
 
+export type Settings = {
+  id: string;
+} & SettingsState;
+
 export interface IStorage {
   everything(): Promise<IStorage.Data>;
   get<K extends StorageKeys>(key: K, id?: string): Promise<IStorage.DataReturnType<K> | IStorage.DataReturnType<K>[]>;
@@ -34,12 +40,14 @@ export interface IStorage {
 export enum StorageKeys {
   LISTS = 'lists',
   NOTES = 'notes',
+  SETTINGS = 'settings',
 }
 
 export namespace IStorage {
   export type Data = {
     [StorageKeys.LISTS]: Todo.List[];
     [StorageKeys.NOTES]: Notes.List[];
+    [StorageKeys.SETTINGS]: Settings[];
   };
 
   export namespace Data {

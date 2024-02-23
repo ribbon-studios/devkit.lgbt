@@ -1,13 +1,36 @@
 import { Header } from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Toaster } from '@/components/ui/sonner';
+import { loadSettings } from '@/slices/settings.slice';
+import { useAppDispatch } from '@/slices/state';
 import { Home } from 'lucide-react';
+import { useState } from 'react';
 import { Link, Outlet, useRouteError } from 'react-router-dom';
+import { useEffectOnce } from 'usehooks-ts';
 
 export function Component() {
+  const dispatch = useAppDispatch();
+  const [isLoading, setLoading] = useState(true);
+
+  useEffectOnce(() => {
+    const load = async () => {
+      await Promise.all([dispatch(loadSettings())]);
+
+      setLoading(false);
+    };
+
+    load();
+  });
+
+  if (isLoading) {
+    return <div />;
+  }
+
   return (
     <Header>
       <Outlet />
+      <Toaster />
     </Header>
   );
 }

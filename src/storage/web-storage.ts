@@ -1,18 +1,29 @@
 import { IDBPDatabase, openDB } from 'idb';
-import { IStorage, StorageKeys } from './base';
+import { INITIAL_STATE as INITIAL_SETTINGS } from '../slices/settings.slice';
+import { IStorage, Settings, StorageKeys } from './base';
 
 export class WebStorage implements IStorage {
   static instance = new WebStorage();
 
   private async open(): Promise<IDBPDatabase> {
-    return await openDB('devkit', 2, {
-      upgrade(db, oldVersion) {
+    return await openDB('devkit', 3, {
+      async upgrade(db, oldVersion) {
         if (oldVersion < 1) {
           db.createObjectStore(StorageKeys.LISTS);
         }
 
         if (oldVersion < 2) {
           db.createObjectStore(StorageKeys.NOTES);
+        }
+
+        if (oldVersion < 3) {
+          const store = db.createObjectStore(StorageKeys.SETTINGS);
+          const settings: Settings = {
+            ...INITIAL_SETTINGS,
+            id: 'settings',
+          };
+
+          await store.put(settings, settings.id);
         }
       },
     });
@@ -22,6 +33,7 @@ export class WebStorage implements IStorage {
     return {
       [StorageKeys.LISTS]: await this.get(StorageKeys.LISTS),
       [StorageKeys.NOTES]: await this.get(StorageKeys.NOTES),
+      [StorageKeys.SETTINGS]: await this.get(StorageKeys.SETTINGS),
     };
   }
 

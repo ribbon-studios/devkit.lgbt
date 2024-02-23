@@ -8,8 +8,8 @@ import { createId } from '@paralleldrive/cuid2';
 import { useCachedState } from '@rain-cafe/react-utils';
 import { ArrowLeftToLine, ArrowRightToLine, Flame } from 'lucide-react';
 import { SyntheticEvent, useMemo } from 'react';
+import { Button } from '../ui/button';
 import { ListItems } from './ListItems';
-import { Button } from './ui/button';
 
 export type ListItemProps = {
   item?: Todo.Item;

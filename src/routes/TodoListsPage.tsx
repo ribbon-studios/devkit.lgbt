@@ -1,6 +1,6 @@
-import { List } from '@/components/List';
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
+import { List } from '@/components/todo/List';
 import { Button } from '@/components/ui/button';
 import { Storage, StorageKeys, Todo } from '@/storage';
 import { createId } from '@paralleldrive/cuid2';

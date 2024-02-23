@@ -1,5 +1,5 @@
-import { ListItem } from '@/components/ListItem';
 import { Todo } from '@/storage';
+import { ListItem } from './ListItem';
 
 export type ListItemsProps = {
   autoFocus?: boolean;
