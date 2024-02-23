@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import {
   blockquote,
   bold,
@@ -12,7 +13,6 @@ import {
   link,
   listItem,
   orderedList,
-  paragraph,
   strike,
   underline,
 } from '@bangle.dev/base-components';
@@ -21,6 +21,7 @@ import '@bangle.dev/core/style.css';
 import { markdownParser, markdownSerializer } from '@bangle.dev/markdown';
 import { BangleEditor, useEditorState } from '@bangle.dev/react';
 import { ComponentProps, useMemo } from 'react';
+import styles from './Editor.module.css';
 
 // TODO: Remove this when https://github.com/bangle-io/bangle-editor/pull/272 is merged
 ((has) => {
@@ -45,7 +46,6 @@ const specRegistry = new SpecRegistry([
   link.spec(),
   listItem.spec(),
   orderedList.spec(),
-  paragraph.spec(),
   strike.spec(),
   underline.spec(),
 ]);
@@ -93,7 +93,6 @@ export function DevkitEditor({ initialValue: externalInitialValue, onChange, ...
         link.plugins(),
         listItem.plugins(),
         orderedList.plugins(),
-        paragraph.plugins(),
         strike.plugins(),
         underline.plugins(),
       ] as any,
@@ -101,12 +100,8 @@ export function DevkitEditor({ initialValue: externalInitialValue, onChange, ...
   });
 
   return (
-    <div {...props} className="flex flex-1" id="bangle-editor">
-      <BangleEditor
-        className="flex-1 grid grid-cols-1"
-        state={editorState}
-        onReady={(editor) => editor.view.state.doc}
-      />
+    <div {...props} className={cn('flex flex-1', styles.editor)} id="bangle-editor">
+      <BangleEditor className="flex-1 grid grid-cols-1" state={editorState} />
     </div>
   );
 }

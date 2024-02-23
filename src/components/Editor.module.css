@@ -1,0 +1,29 @@
+.editor {
+  :global .bangle-editor {
+    @apply outline-none;
+  }
+
+  :global pre {
+    @apply bg-secondary rounded-md px-6;
+  }
+
+  :global blockquote {
+    @apply flex flex-col justify-center border-l-8 bg-secondary/50 text-secondary-foreground px-3 py-3 gap-2;
+
+    > * {
+      @apply leading-none;
+    }
+  }
+
+  :global li[data-bangle-is-todo] {
+    @apply flex gap-2;
+
+    > span:first-child > input {
+      @apply m-0;
+    }
+  }
+
+  :global img {
+    @apply rounded-md border-none;
+  }
+}
