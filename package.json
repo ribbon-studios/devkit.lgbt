@@ -15,6 +15,7 @@
     "@milkdown/plugin-indent": "^7.3.3",
     "@milkdown/plugin-listener": "^7.3.3",
     "@milkdown/preset-commonmark": "^7.3.3",
+    "@milkdown/preset-gfm": "^7.3.3",
     "@milkdown/prose": "^7.3.3",
     "@milkdown/react": "^7.3.3",
     "@milkdown/theme-nord": "^7.3.3",

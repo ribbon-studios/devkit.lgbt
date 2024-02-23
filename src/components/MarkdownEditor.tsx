@@ -3,6 +3,7 @@ import { Editor, defaultValueCtx, editorViewOptionsCtx, rootCtx } from '@milkdow
 import { indent } from '@milkdown/plugin-indent';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
 import { commonmark } from '@milkdown/preset-commonmark';
+import { gfm } from '@milkdown/preset-gfm';
 import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react';
 import './MarkdownEditor.css';
 
@@ -17,7 +18,7 @@ const MilkdownEditor: React.FC<MilkdownEditorProps> = ({ value, onChange }) => {
       .config((ctx) => {
         ctx.update(editorViewOptionsCtx, (prev) => ({
           ...prev,
-          attributes: { class: 'milkdown-editor flex-1', spellcheck: 'false' },
+          attributes: { class: 'milkdown-editor flex-1 outline-none', spellcheck: 'false' },
         }));
 
         ctx.set(rootCtx, root);
@@ -26,6 +27,7 @@ const MilkdownEditor: React.FC<MilkdownEditorProps> = ({ value, onChange }) => {
         if (value) ctx.set(defaultValueCtx, value);
       })
       .use(commonmark)
+      .use(gfm)
       .use(listener)
       .use(indent)
   );
@@ -38,7 +40,7 @@ export const MilkdownEditorWrapper: React.FC<MilkdownEditorProps & { className?:
   ...props
 }) => {
   return (
-    <div className={cn('border border-input rounded-md flex flex-col', className)}>
+    <div className={cn('flex flex-col', className)}>
       <MilkdownProvider>
         <MilkdownEditor {...props} />
       </MilkdownProvider>

@@ -1,41 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 [data-milkdown-root='true'] {
-  display: flex;
-  flex: 1;
+  @apply flex flex-1;
 
   > .milkdown {
-    display: inherit;
-    flex: inherit;
-    width: 100%;
-    font-size: 16px;
+    @apply flex flex-1 w-full text-[16px];
 
     * {
-      font-size: 1rem;
+      @apply text-base;
     }
 
     h1 {
-      font-size: 2rem;
-      font-weight: bold;
+      @apply text-3xl font-bold;
     }
 
     h2 {
-      font-size: 1.5rem;
-      font-weight: bold;
+      @apply text-2xl font-bold;
     }
 
     h3 {
-      font-size: 1.25rem;
-      font-weight: bold;
+      @apply text-lg font-bold;
     }
 
     li {
-      display: flex;
-      gap: 5px;
+      @apply flex gap-1;
     }
 
     li::before {
+      @apply font-bold ml-2;
+
       content: attr(data-label);
-      margin-left: 10px;
-      font-weight: bold;
+    }
+
+    pre {
+      @apply bg-secondary rounded-md m-2 p-2;
+    }
+
+    blockquote {
+      @apply border-l-8 border-l-secondary bg-secondary/50 pl-2 py-1 font-light;
     }
   }
 }
