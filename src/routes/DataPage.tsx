@@ -54,11 +54,11 @@ export function DataPage() {
       <PageHeader className="justify-between">
         <h1 className="text-2xl leading-none">Data</h1>
         <div className="flex gap-2">
-          <Button variant="ghost" onClick={onImport} disabled={noClipboardRead}>
+          <Button variant="outline" onClick={onImport} disabled={noClipboardRead}>
             Import
           </Button>
           <Button
-            variant="ghost"
+            variant="outline"
             onClick={() => {
               navigator.clipboard.writeText(btoa(JSON.stringify(data)));
             }}
