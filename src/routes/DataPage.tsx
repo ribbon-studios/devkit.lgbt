@@ -1,9 +1,11 @@
+import { ButtonIcon } from '@/components/ButtonIcon';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
 import { Button } from '@/components/ui/button';
 import { useBetterLoaderData } from '@/hooks/use-loader-data';
 import { Storage } from '@/storage';
+import { Download, Flame, Import } from 'lucide-react';
 import { useState } from 'react';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
@@ -55,25 +57,26 @@ export function DataPage() {
       <PageHeader className="justify-between">
         <h1 className="text-2xl leading-none">Data</h1>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={onImport} disabled={noClipboardRead}>
+          <ButtonIcon variant="outline" onClick={onImport} disabled={noClipboardRead} icon={Import}>
             Import
-          </Button>
-          <Button
+          </ButtonIcon>
+          <ButtonIcon
             variant="outline"
             onClick={() => {
               navigator.clipboard.writeText(btoa(JSON.stringify(data)));
             }}
             disabled={noClipboardWrite}
+            icon={Download}
           >
             Export
-          </Button>
+          </ButtonIcon>
           <ConfirmDialog
             description="This action cannot be undone. This will permanently all of your data."
             onSubmit={onClear}
           >
-            <Button variant="destructive" disabled={loading}>
+            <ButtonIcon variant="destructive" icon={Flame}>
               Clear
-            </Button>
+            </ButtonIcon>
           </ConfirmDialog>
         </div>
       </PageHeader>
