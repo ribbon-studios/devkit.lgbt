@@ -12,6 +12,7 @@
   "dependencies": {
     "@bangle.dev/base-components": "^0.32.1",
     "@bangle.dev/core": "^0.32.1",
+    "@bangle.dev/markdown": "^0.32.1",
     "@bangle.dev/pm": "^0.32.1",
     "@bangle.dev/react": "^0.32.1",
     "@bangle.dev/react-emoji-suggest": "^0.32.1",
