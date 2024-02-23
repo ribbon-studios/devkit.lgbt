@@ -13,6 +13,8 @@ This is hosted via GitHub Pages and will **NEVER** make _any_ external requests.
 
 #### Native App
 
+See [Releases](https://github.com/rain-cafe/devkit.lgbt/releases/latest)!
+
 We currently build versions of the app for:
 
 - Linux (`deb`)
