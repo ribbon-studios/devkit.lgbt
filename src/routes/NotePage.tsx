@@ -2,6 +2,7 @@ import { MilkdownEditorWrapper } from '@/components/MarkdownEditor';
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
 import { useBetterLoaderData } from '@/hooks/use-loader-data';
+import { useTitle } from '@/lib/notes';
 import { Notes, Storage, StorageKeys } from '@/storage';
 import { Link, LoaderFunctionArgs, redirect } from 'react-router-dom';
 
@@ -17,7 +18,7 @@ export async function loader({ params }: LoaderFunctionArgs<any>) {
 
 export function Component() {
   const [note, setNote] = useBetterLoaderData<Notes.List>();
-  const name = note.text.split('\n')[0] || 'Unnamed Note';
+  const name = useTitle(note);
 
   const onChange = async (updatedNote: Notes.List) => {
     setNote(updatedNote);
@@ -44,28 +45,6 @@ export function Component() {
             });
           }}
         />
-        {/* <Textarea
-          className="flex-1 resize-none"
-          value={note.text}
-          onKeyDown={(e) => {
-            if (e.key === 'Tab') {
-              e.preventDefault();
-              const { selectionStart, selectionEnd, value } = e.currentTarget;
-
-              // set textarea value to: text before caret + tab + text after caret
-              e.currentTarget.value = `${value.substring(0, selectionStart)}\t${value.substring(selectionEnd)}`;
-
-              // put caret at right position again
-              e.currentTarget.selectionStart = e.currentTarget.selectionEnd = selectionStart + 1;
-            }
-          }}
-          onChange={(e) =>
-            onChange({
-              ...note,
-              text: e.target.value,
-            })
-          }
-        /> */}
       </PageContent>
     </>
   );

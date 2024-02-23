@@ -1,12 +1,11 @@
-import { ConfirmDialog } from '@/components/ConfirmDialog';
+import { NoteItem } from '@/components/NoteItem';
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
 import { Button } from '@/components/ui/button';
 import { useBetterLoaderData } from '@/hooks/use-loader-data';
 import { Notes, Storage, StorageKeys } from '@/storage';
 import { createId } from '@paralleldrive/cuid2';
-import { BadgePlus, Flame, NotebookText } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { BadgePlus } from 'lucide-react';
 
 export async function loader() {
   return await Storage.get(StorageKeys.NOTES);
@@ -46,26 +45,15 @@ export function Component() {
           </div>
         ) : (
           <>
-            {notes.map(({ id, text }) => (
-              <div className="flex gap-2" key={id}>
-                <Button className="flex flex-1 justify-start gap-2 overflow-hidden" asChild variant="secondary">
-                  <Link to={`/notes/${id}`}>
-                    <NotebookText />
-                    <div className="truncate">{text.split('\n')[0] || 'Unnamed Note'}</div>
-                  </Link>
-                </Button>
-                <ConfirmDialog
-                  description="This action cannot be undone. This will permanently delete this list."
-                  onSubmit={async () => {
-                    setNotes(notes.filter((note) => note.id !== id));
-                    await Storage.delete(StorageKeys.NOTES, id);
-                  }}
-                >
-                  <Button className="shrink-0" variant="destructive" size="icon">
-                    <Flame />
-                  </Button>
-                </ConfirmDialog>
-              </div>
+            {notes.map((note) => (
+              <NoteItem
+                key={note.id}
+                note={note}
+                onDelete={async () => {
+                  setNotes(notes.filter((x) => x.id !== note.id));
+                  await Storage.delete(StorageKeys.NOTES, note.id);
+                }}
+              />
             ))}
           </>
         )}
