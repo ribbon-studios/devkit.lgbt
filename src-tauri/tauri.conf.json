@@ -6,8 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "Devkit",
-    "version": "0.1.2"
+    "productName": "Devkit"
   },
   "tauri": {
     "allowlist": {
