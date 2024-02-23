@@ -51,13 +51,13 @@ export function TodoLists() {
           <>
             {filteredLists.map(({ id, label, items }) => (
               <div className="flex gap-2" key={id}>
-                <Button className="flex flex-1 justify-start gap-2" asChild variant="secondary">
+                <Button className="flex flex-1 justify-start gap-2 overflow-hidden" asChild variant="secondary">
                   <Link to={`/todo/${id}`}>
                     <ListTodo />
-                    {label}
+                    <div className="truncate">{label}</div>
                   </Link>
                 </Button>
-                <div className="hidden sm:flex bg-secondary h-10 px-4 items-center justify-center rounded-md">
+                <div className="hidden md:flex bg-secondary h-10 px-4 items-center justify-center rounded-md">
                   {items.length} Items
                 </div>
                 <ConfirmDialog

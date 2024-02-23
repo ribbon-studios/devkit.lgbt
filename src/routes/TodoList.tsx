@@ -32,8 +32,8 @@ export function TodoList() {
         <Link className="hover:underline" to="/todo">
           Todo
         </Link>
-        <span>&gt;</span>
-        <span>{list.label}</span>
+        <div>&gt;</div>
+        <div className="truncate">{list.label}</div>
       </PageHeader>
       <PageContent>
         <div className="flex items-center gap-4">
