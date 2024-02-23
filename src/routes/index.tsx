@@ -1,0 +1,67 @@
+import { Database, Hash, ListTodo, LucideIcon } from 'lucide-react';
+import { LoaderFunction, RouteObject } from 'react-router-dom';
+import { DataPage } from './DataPage';
+import { HashingPage } from './HashingPage';
+import { TodoListPage } from './TodoListPage';
+import { TodoListsPage } from './TodoListsPage';
+
+/**
+ * Routes that appear at the top of the header
+ */
+export const ROUTES: Route[] = [
+  {
+    path: '/todo',
+    element: TodoListsPage,
+    loader: TodoListsPage.loader,
+    icon: ListTodo,
+    label: 'Todo List',
+  },
+  {
+    path: '/hash',
+    element: HashingPage,
+    icon: Hash,
+    label: 'Hashing',
+  },
+];
+
+/**
+ * Routes that appear at the bottom of the header
+ */
+export const SUB_ROUTES: Route[] = [
+  {
+    path: '/data',
+    element: DataPage,
+    loader: DataPage.loader,
+    icon: Database,
+    label: 'View Data',
+  },
+];
+
+/**
+ * Routes that are linked via another page
+ */
+export const NESTED_ROUTES: NestedRoute[] = [
+  {
+    path: '/todo/:id',
+    element: TodoListPage,
+    loader: TodoListPage.loader,
+  },
+];
+
+export const REACT_ROUTES: RouteObject[] = [...ROUTES, ...SUB_ROUTES, ...NESTED_ROUTES].map(
+  ({ path, element: Element, loader }) => ({
+    path,
+    element: <Element />,
+    loader,
+  })
+);
+
+export type Route = {
+  path: string;
+  element: React.ElementType;
+  loader?: LoaderFunction<any>;
+  icon: LucideIcon;
+  label: string;
+};
+
+export type NestedRoute = Omit<Route, 'icon' | 'label'>;

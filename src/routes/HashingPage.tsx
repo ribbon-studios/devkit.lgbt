@@ -15,7 +15,7 @@ export enum HashingAlgorithm {
   SHA512 = 'SHA-512',
 }
 
-const frameworks: Combobox.Option<HashingAlgorithm>[] = [
+const algorithms: Combobox.Option<HashingAlgorithm>[] = [
   {
     value: HashingAlgorithm.SHA1,
     label: 'sha1',
@@ -63,7 +63,7 @@ export function HashingPage() {
             onChange={(e) => setValue(e.target.value)}
           />
           <Combobox
-            options={frameworks}
+            options={algorithms}
             placeholder={{
               search: 'Search algorithm...',
               select: 'Select algorithm...',

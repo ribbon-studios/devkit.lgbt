@@ -7,11 +7,11 @@ import { Button, ButtonProps } from './ui/button';
 export type ButtonIconProps = {
   icon: LucideIcon;
   children: ReactNode;
-  href?: string;
+  to?: string;
 } & ButtonProps;
 
-export function ButtonIcon({ children, className, icon: Icon, href, ...props }: ButtonIconProps) {
-  const isExternal = href && href.startsWith('https');
+export function ButtonIcon({ children, className, icon: Icon, to, ...props }: ButtonIconProps) {
+  const isExternal = to && to.startsWith('https');
 
   const content = (
     <>
@@ -25,11 +25,11 @@ export function ButtonIcon({ children, className, icon: Icon, href, ...props }: 
     <Button
       className={cn('flex gap-2 p-0 size-10 sm:w-auto sm:px-3 items-center justify-center', className)}
       size="sm"
-      asChild={Boolean(href)}
+      asChild={Boolean(to)}
       {...props}
     >
-      {href ? (
-        <Link to={href} target={isExternal ? '_blank' : undefined}>
+      {to ? (
+        <Link to={to} target={isExternal ? '_blank' : undefined}>
           {content}
         </Link>
       ) : (
