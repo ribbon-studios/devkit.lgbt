@@ -2,7 +2,7 @@ import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
 import { Button } from '@/components/ui/button';
-import { Storage, Todo } from '@/storage';
+import { Storage, StorageKeys, Todo } from '@/storage';
 import { createId } from '@paralleldrive/cuid2';
 import { useCachedState } from '@rain-cafe/react-utils';
 import { BadgePlus, Flame, ListTodo } from 'lucide-react';
@@ -35,7 +35,7 @@ export function TodoListsPage() {
             };
 
             setLists([list, ...lists]);
-            Storage.set(Storage.Keys.LISTS, list);
+            Storage.set(StorageKeys.LISTS, list);
           }}
         >
           <BadgePlus />
@@ -64,7 +64,7 @@ export function TodoListsPage() {
                   description="This action cannot be undone. This will permanently delete this list."
                   onSubmit={async () => {
                     setLists(lists.filter((list) => list.id !== id));
-                    await Storage.delete(Storage.Keys.LISTS, id);
+                    await Storage.delete(StorageKeys.LISTS, id);
                   }}
                 >
                   <Button className="shrink-0" variant="destructive" size="icon">
@@ -82,6 +82,6 @@ export function TodoListsPage() {
 
 export namespace TodoListsPage {
   export async function loader() {
-    return await Storage.get(Storage.Keys.LISTS);
+    return await Storage.get(StorageKeys.LISTS);
   }
 }
