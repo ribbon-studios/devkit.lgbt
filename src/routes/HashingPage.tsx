@@ -8,7 +8,6 @@ import { useSubtleCrypto } from '@rain-cafe/react-utils';
 import { useState } from 'react';
 
 export enum HashingAlgorithm {
-  // MD5 = 'md5',
   SHA1 = 'SHA-1',
   SHA256 = 'SHA-256',
   SHA384 = 'SHA-384',

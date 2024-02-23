@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { useCachedState } from '@rain-cafe/react-utils';
 
 export type ComboboxProps<T extends string> = {
   options: Combobox.Option<T>[];
@@ -12,6 +13,7 @@ export type ComboboxProps<T extends string> = {
     search: string;
     select: string;
   };
+  value?: T;
   onChange?: (value?: T) => void;
 };
 
@@ -24,6 +26,7 @@ export function Combobox<T extends string>({
   options,
   placeholder = DEFAULT_PLACEHOLDERS,
   onChange,
+  value: externalValue,
 }: ComboboxProps<T>) {
   const placeholders = placeholder ?? {
     search: 'Search options...',
@@ -31,7 +34,7 @@ export function Combobox<T extends string>({
   };
 
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = useCachedState(() => externalValue ?? '', [externalValue]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
