@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "parcel src/index.html",
-    "build": "parcel build src/index.html",
+    "dev": "vite",
+    "build": "vite build",
+    "test": "vitest",
     "tauri": "tauri"
   },
   "dependencies": {
@@ -21,7 +22,7 @@
     "clsx": "^2.1.0",
     "cmdk": "^0.2.0",
     "idb": "^8.0.0",
-    "lucide-react": "^0.315.0",
+    "lucide-react": "^0.317.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.3",
@@ -32,17 +33,19 @@
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.9",
     "@types/bun": "^1.0.4",
-    "@types/node": "^20.11.6",
+    "@types/node": "^20.11.10",
     "@types/parcel-env": "^0.0.5",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "@types/react-syntax-highlighter": "^15.5.11",
+    "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.17",
-    "parcel": "^2.11.0",
     "postcss": "^8.4.33",
-    "process": "^0.11.10",
+    "react-refresh": "^0.14.0",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12",
+    "vitest": "^1.2.2"
   },
   "optionalDependencies": {
     "@parcel/watcher-darwin-x64": "^2.4.0",

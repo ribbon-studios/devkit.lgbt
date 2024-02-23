@@ -1,6 +1,6 @@
 {
   "build": {
-    "beforeDevCommand": "bun run start --port 1420",
+    "beforeDevCommand": "bun run dev --port 1420",
     "beforeBuildCommand": "npm run build",
     "devPath": "http://localhost:1420",
     "distDir": "../dist"
@@ -18,7 +18,7 @@
     },
     "bundle": {
       "active": true,
-      "targets": ["deb", "msi", "nsis", "app", "dmg", "updater"],
+      "targets": "all",
       "identifier": "lgbt.devkit",
       "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"]
     },
