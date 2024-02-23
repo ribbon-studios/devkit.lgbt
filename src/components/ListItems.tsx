@@ -1,6 +1,5 @@
 import { ListItem } from '@/components/ListItem';
-import { Storage, StorageKeys, Todo } from '@/storage';
-import { LoaderFunctionArgs, redirect } from 'react-router-dom';
+import { Todo } from '@/storage';
 
 export type ListItemsProps = {
   autoFocus?: boolean;
@@ -69,16 +68,4 @@ export function ListItems({ autoFocus, parentItem, items, onChange, onUnnest }: 
       ))}
     </>
   );
-}
-
-export namespace TodoListPage {
-  export async function loader({ params }: LoaderFunctionArgs<any>) {
-    if (!params.id) return redirect('/');
-
-    const list = await Storage.get(StorageKeys.LISTS, params.id);
-
-    if (!list) return redirect('/todo');
-
-    return list;
-  }
 }
