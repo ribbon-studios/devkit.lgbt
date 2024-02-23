@@ -23,3 +23,15 @@ export function setDone(items: Todo.Item[] | Todo.Item, done: boolean): Todo.Ite
     subItems: setDone(items.subItems, done),
   };
 }
+
+export function hasChanged(updatedItem: Todo.Item, originalItem?: Todo.Item): boolean {
+  if (updatedItem !== originalItem) return true;
+
+  return Object.keys(updatedItem).some((key) => {
+    return updatedItem[key as keyof Todo.Item] !== originalItem[key as keyof Todo.Item];
+  });
+}
+
+export function hasNotChanged(updatedItem: Todo.Item, originalItem?: Todo.Item): boolean {
+  return !hasChanged(updatedItem, originalItem);
+}
