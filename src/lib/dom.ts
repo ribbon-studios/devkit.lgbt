@@ -1,3 +1,8 @@
-export function refocus(element: HTMLElement) {
-  window.requestAnimationFrame(() => element.focus());
+export function refocus(element: HTMLElement): Promise<void> {
+  return new Promise((resolve) => {
+    window.requestAnimationFrame(() => {
+      element.focus();
+      resolve();
+    });
+  });
 }
