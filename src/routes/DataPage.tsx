@@ -1,3 +1,4 @@
+import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
 import { Button } from '@/components/ui/button';
@@ -66,9 +67,14 @@ export function DataPage() {
           >
             Export
           </Button>
-          <Button variant="destructive" onClick={onClear} disabled={loading}>
-            Clear
-          </Button>
+          <ConfirmDialog
+            description="This action cannot be undone. This will permanently all of your data."
+            onSubmit={onClear}
+          >
+            <Button variant="destructive" disabled={loading}>
+              Clear
+            </Button>
+          </ConfirmDialog>
         </div>
       </PageHeader>
       <PageContent className="gap-4">
