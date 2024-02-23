@@ -1,23 +1,18 @@
-import { ConfirmDialog } from '@/components/ConfirmDialog';
+import { List } from '@/components/List';
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
 import { Button } from '@/components/ui/button';
 import { Storage, StorageKeys, Todo } from '@/storage';
 import { createId } from '@paralleldrive/cuid2';
 import { useCachedState } from '@rain-cafe/react-utils';
-import { BadgePlus, Flame, ListTodo } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import { Link, useLoaderData } from 'react-router-dom';
+import { BadgePlus } from 'lucide-react';
+import { useLoaderData } from 'react-router-dom';
 
 export function TodoListsPage() {
   const externalList = useLoaderData() as Todo.List[];
-  const [search, setSearch] = useState<string>('');
   const [lists, setLists] = useCachedState<Todo.List[]>(() => externalList, [externalList]);
-  const filteredLists = useMemo(() => {
-    return search ? lists?.filter((list) => list.label.includes(search)) : lists;
-  }, [lists, search]);
 
-  if (!lists || !filteredLists) return null;
+  if (!lists) return null;
 
   return (
     <>
@@ -49,29 +44,15 @@ export function TodoListsPage() {
           </div>
         ) : (
           <>
-            {filteredLists.map(({ id, label, items }) => (
-              <div className="flex gap-2" key={id}>
-                <Button className="flex flex-1 justify-start gap-2 overflow-hidden" asChild variant="secondary">
-                  <Link to={`/todo/${id}`}>
-                    <ListTodo />
-                    <div className="truncate">{label}</div>
-                  </Link>
-                </Button>
-                <div className="hidden md:flex bg-secondary h-10 px-4 items-center justify-center rounded-md">
-                  {items.length} Items
-                </div>
-                <ConfirmDialog
-                  description="This action cannot be undone. This will permanently delete this list."
-                  onSubmit={async () => {
-                    setLists(lists.filter((list) => list.id !== id));
-                    await Storage.delete(StorageKeys.LISTS, id);
-                  }}
-                >
-                  <Button className="shrink-0" variant="destructive" size="icon">
-                    <Flame />
-                  </Button>
-                </ConfirmDialog>
-              </div>
+            {lists.map((list) => (
+              <List
+                key={list.id}
+                list={list}
+                onDelete={async () => {
+                  setLists(lists.filter(({ id }) => id !== list.id));
+                  await Storage.delete(StorageKeys.LISTS, list.id);
+                }}
+              />
             ))}
           </>
         )}
