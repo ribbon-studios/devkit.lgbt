@@ -1,0 +1,41 @@
+[data-milkdown-root='true'] {
+  display: flex;
+  flex: 1;
+
+  > .milkdown {
+    display: inherit;
+    flex: inherit;
+    width: 100%;
+    font-size: 16px;
+
+    * {
+      font-size: 1rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+
+    li {
+      display: flex;
+      gap: 5px;
+    }
+
+    li::before {
+      content: attr(data-label);
+      margin-left: 10px;
+      font-weight: bold;
+    }
+  }
+}
