@@ -1,4 +1,4 @@
-import { Database, ListTodo, LucideIcon } from 'lucide-react';
+import { Bug, Code, Database, ExternalLink, ListTodo, LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
@@ -20,6 +20,16 @@ const additionalItems: Header.Item[] = [
     href: '/data',
     label: 'View Data',
     icon: Database,
+  },
+  {
+    href: 'https://github.com/rain-cafe/devkit.lgbt/issues',
+    label: 'Report an Issue',
+    icon: Bug,
+  },
+  {
+    href: 'https://github.com/rain-cafe/devkit.lgbt',
+    label: 'Source Code',
+    icon: Code,
   },
 ];
 
@@ -46,11 +56,14 @@ export function Header({ children }: HeaderProps) {
         })}
         <div className="flex-1" />
         {additionalItems.map((item, index) => {
+          const isExternal = item.href.startsWith('https');
+
           return (
             <Button key={index} className="flex gap-2 justify-start" size="sm" asChild variant="ghost">
-              <Link to={item.href}>
+              <Link to={item.href} target={isExternal ? '_blank' : undefined}>
                 <item.icon />
-                {item.label}
+                <div className="flex-1">{item.label}</div>
+                {isExternal && <ExternalLink />}
               </Link>
             </Button>
           );
