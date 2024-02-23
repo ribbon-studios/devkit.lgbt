@@ -70,7 +70,7 @@ export function TodoListPage() {
               await Storage.delete(StorageKeys.LISTS, list.id);
             }}
           >
-            <Button className="shrink-0 mx-4" variant="destructive" size="icon">
+            <Button className="shrink-0 mx-2" variant="destructive" size="icon">
               <Flame />
             </Button>
           </ConfirmDialog>

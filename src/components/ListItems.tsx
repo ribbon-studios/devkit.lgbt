@@ -4,12 +4,13 @@ import { LoaderFunctionArgs, redirect } from 'react-router-dom';
 
 export type ListItemsProps = {
   autoFocus?: boolean;
+  parentItem?: Todo.Item;
   items: Todo.Item[];
   onChange: (updatedItems: Todo.Item[]) => void;
-  onUnnestRequested?: (updatedItem: Todo.Item, source: boolean) => void;
+  onUnnest?: (updatedItem: Todo.Item, parentItem: Todo.Item) => void;
 };
 
-export function ListItems({ autoFocus, items, onChange, onUnnestRequested }: ListItemsProps) {
+export function ListItems({ autoFocus, parentItem, items, onChange, onUnnest }: ListItemsProps) {
   return (
     <>
       {items.map((item, i) => (
@@ -17,6 +18,8 @@ export function ListItems({ autoFocus, items, onChange, onUnnestRequested }: Lis
           autoFocus={autoFocus}
           key={item.id}
           item={item}
+          previousItem={items[i - 1]}
+          parentItem={parentItem}
           onChange={(updatedItem) => {
             onChange(
               items.map((item) => {
@@ -29,11 +32,7 @@ export function ListItems({ autoFocus, items, onChange, onUnnestRequested }: Lis
           onDelete={(deletedItem) => {
             onChange(items.filter((item) => item.id !== deletedItem.id));
           }}
-          onNestRequested={(updatedItem) => {
-            const previousItem = items[i - 1];
-
-            if (!previousItem) return;
-
+          onNest={(updatedItem, previousItem) => {
             onChange(
               items
                 .filter((item) => item.id !== updatedItem.id)
@@ -50,20 +49,21 @@ export function ListItems({ autoFocus, items, onChange, onUnnestRequested }: Lis
                 })
             );
           }}
-          onUnnestRequested={(updatedItem, source) => {
-            if (source) {
-              onUnnestRequested?.(updatedItem, source);
-            } else {
-              onChange([
-                ...items.slice(0, i),
-                {
-                  ...item,
-                  subItems: item.subItems.filter(({ id }) => id !== updatedItem.id),
-                },
-                updatedItem,
-                ...items.slice(i + 1),
-              ]);
+          onUnnest={(updatedItem, parentItem) => {
+            // Not our problem, forward it further up
+            if (item !== parentItem) {
+              return onUnnest?.(updatedItem, parentItem);
             }
+
+            onChange([
+              ...items.slice(0, i),
+              {
+                ...item,
+                subItems: item.subItems.filter(({ id }) => id !== updatedItem.id),
+              },
+              updatedItem,
+              ...items.slice(i + 1),
+            ]);
           }}
         />
       ))}
