@@ -27,6 +27,18 @@ export function NotePage() {
         <Textarea
           className="flex-1 resize-none"
           value={note.text}
+          onKeyDown={(e) => {
+            if (e.key === 'Tab') {
+              e.preventDefault();
+              const { selectionStart, selectionEnd, value } = e.currentTarget;
+
+              // set textarea value to: text before caret + tab + text after caret
+              e.currentTarget.value = `${value.substring(0, selectionStart)}\t${value.substring(selectionEnd)}`;
+
+              // put caret at right position again
+              e.currentTarget.selectionStart = e.currentTarget.selectionEnd = selectionStart + 1;
+            }
+          }}
           onChange={(e) =>
             onChange({
               ...note,
