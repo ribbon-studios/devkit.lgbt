@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useBetterLoaderData } from '@/hooks/use-loader-data';
 import { Notes, Storage, StorageKeys } from '@/storage';
 import { createId } from '@paralleldrive/cuid2';
-import { BadgePlus, Flame, ListTodo } from 'lucide-react';
+import { BadgePlus, Flame, NotebookText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function NotesPage() {
@@ -46,7 +46,7 @@ export function NotesPage() {
               <div className="flex gap-2" key={id}>
                 <Button className="flex flex-1 justify-start gap-2 overflow-hidden" asChild variant="secondary">
                   <Link to={`/notes/${id}`}>
-                    <ListTodo />
+                    <NotebookText />
                     <div className="truncate">{text.split('\n')[0] || 'Unnamed Note'}</div>
                   </Link>
                 </Button>
