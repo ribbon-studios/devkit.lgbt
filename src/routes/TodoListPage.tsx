@@ -12,8 +12,10 @@ import { useCachedState } from '@rain-cafe/react-utils';
 import { Flame } from 'lucide-react';
 import { useMemo } from 'react';
 import { Link, LoaderFunctionArgs, Navigate, redirect, useLoaderData } from 'react-router-dom';
+import { useIsFirstRender } from 'usehooks-ts';
 
 export function TodoListPage() {
+  const isFirstRender = useIsFirstRender();
   const externalList = useLoaderData() as Todo.List;
   const [list, setList] = useCachedState<Todo.List>(() => externalList, [externalList]);
   const allDone = useMemo(() => {
@@ -84,9 +86,11 @@ export function TodoListPage() {
               items: [item, ...list.items],
             });
           }}
+          autoFocus
           blank
         />
         <ListItems
+          autoFocus={!isFirstRender}
           items={list.items}
           onChange={(updatedItems) => {
             onChange({
