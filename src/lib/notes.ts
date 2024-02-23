@@ -6,9 +6,7 @@ export function useTitle({ text }: Notes.List): string {
     const [rawHeader] = text.split('\n');
 
     if (rawHeader) {
-      const [_, match] = rawHeader.match(/([\d\w\s]+)/) ?? [];
-
-      return match?.trim();
+      return rawHeader.replace(/[#*_]/g, '').trim();
     }
 
     return 'Unnamed Note';
