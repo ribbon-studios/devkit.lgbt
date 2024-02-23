@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { setDone } from '@/lib/items';
 import { Storage, StorageKeys, Todo } from '@/storage';
 import { useCachedState } from '@rain-cafe/react-utils';
 import { Flame } from 'lucide-react';
@@ -48,10 +49,7 @@ export function TodoListPage() {
               onClick={() => {
                 onChange({
                   ...list,
-                  items: list.items.map((item) => ({
-                    ...item,
-                    done: !allDone,
-                  })),
+                  items: setDone(list.items, !allDone),
                 });
               }}
             />
