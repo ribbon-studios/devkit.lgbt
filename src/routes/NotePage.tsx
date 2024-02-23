@@ -1,4 +1,4 @@
-import { MilkdownEditorWrapper } from '@/components/MarkdownEditor';
+import { DevkitEditor } from '@/components/Editor';
 import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
 import { useBetterLoaderData } from '@/hooks/use-loader-data';
@@ -35,9 +35,9 @@ export function Component() {
         <div className="truncate">{name}</div>
       </PageHeader>
       <PageContent>
-        <MilkdownEditorWrapper
+        <DevkitEditor
           className="flex-1"
-          value={note.text}
+          initialValue={note.text}
           onChange={(value) => {
             onChange({
               ...note,
