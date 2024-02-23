@@ -25,8 +25,12 @@ const additionalItems: Header.Item[] = [
 
 export function Header({ children }: HeaderProps) {
   return (
-    <div className="flex min-h-screen">
-      <div className={'rounded-lg flex flex-col bg-background shadow-sm shadow-indigo-950 p-4 gap-2 min-w-60'}>
+    <div className="flex min-h-screen max-h-screen">
+      <div
+        className={
+          'rounded-lg flex flex-col bg-background border-r border-r-border shadow-sm shadow-indigo-950 p-4 gap-2 min-w-60'
+        }
+      >
         <Link className={'font-extrabold text-2xl hover:text-white/80 transition-colors'} to="/">
           Devkit
         </Link>
@@ -52,7 +56,7 @@ export function Header({ children }: HeaderProps) {
           );
         })}
       </div>
-      <div className="flex flex-1 flex-col p-4">{children}</div>
+      <div className="flex flex-1 flex-col overflow-auto">{children}</div>
     </div>
   );
 }
