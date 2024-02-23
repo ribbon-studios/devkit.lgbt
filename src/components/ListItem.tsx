@@ -1,15 +1,16 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import { isDone, setDone } from '@/lib/items';
 import { cn } from '@/lib/utils';
 import { Todo } from '@/storage';
 import { createId } from '@paralleldrive/cuid2';
 import { useCachedState } from '@rain-cafe/react-utils';
 import { Flame } from 'lucide-react';
+import { useMemo } from 'react';
 import { ListItems } from './ListItems';
 import { Button } from './ui/button';
 
 export type ListItemProps = {
-  className?: string;
   item?: Todo.Item;
   placeholder?: string;
   blank?: boolean;
@@ -20,7 +21,6 @@ export type ListItemProps = {
 };
 
 export function ListItem({
-  className,
   item: externalItem,
   placeholder,
   blank,
@@ -39,6 +39,7 @@ export function ListItem({
       },
     [externalItem]
   );
+  const done = useMemo(() => isDone(item), [item]);
 
   if (!item) return null;
 
@@ -61,20 +62,17 @@ export function ListItem({
 
   return (
     <>
-      <div className={cn('flex gap-4 items-center', className)}>
+      <div className={'flex gap-4 items-center'}>
         <Checkbox
           className="shrink-0"
-          checked={item.done}
+          checked={done}
           disabled={blank}
           onClick={() => {
-            onSubmit({
-              ...item,
-              done: !item.done,
-            });
+            onSubmit(setDone(item, !done));
           }}
         />
         <Input
-          className={cn(item.done && 'line-through')}
+          className={cn(done && 'line-through')}
           placeholder={placeholder}
           value={item.label}
           onChange={(e) => {
