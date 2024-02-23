@@ -31,21 +31,19 @@ export function Component() {
           lines={5}
         >
           <div>Have any pages you aren't interested in? Disable them here!</div>
-          <div className="flex flex-col gap-2">
-            {SETTING_ROUTES.map((route) => (
-              <SettingInput key={route.id} className="w-40" label={route.label} icon={route.icon}>
-                <Switch
-                  checked={settings.routes.includes(route.id)}
-                  onCheckedChange={() => {
-                    toast.promise(async () => dispatch(toggleRoute(route.id)), {
-                      success: 'Settings have been saved!',
-                      error: 'Oops! Looks like an error occurred while saving!',
-                    });
-                  }}
-                />
-              </SettingInput>
-            ))}
-          </div>
+          {SETTING_ROUTES.map((route) => (
+            <SettingInput key={route.id} className="w-40" label={route.label} icon={route.icon}>
+              <Switch
+                checked={settings.routes.includes(route.id)}
+                onCheckedChange={() => {
+                  toast.promise(async () => dispatch(toggleRoute(route.id)), {
+                    success: 'Settings have been saved!',
+                    error: 'Oops! Looks like an error occurred while saving!',
+                  });
+                }}
+              />
+            </SettingInput>
+          ))}
         </SkeletonCard>
         <SkeletonCard loading={loading} skeleton={settings.developer.skeletons} title="Developer Tools" lines={1}>
           <SettingInput label="Developer Mode">
