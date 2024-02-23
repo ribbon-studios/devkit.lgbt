@@ -50,8 +50,6 @@
     "vitest": "^1.2.2"
   },
   "optionalDependencies": {
-    "@parcel/watcher-darwin-x64": "^2.4.0",
-    "@parcel/watcher-win32-x64": "^2.4.0",
     "@tauri-apps/cli-darwin-x64": "^1.5.9",
     "@tauri-apps/cli-win32-x64-msvc": "^1.5.9",
     "lightningcss": "^1.23.0"

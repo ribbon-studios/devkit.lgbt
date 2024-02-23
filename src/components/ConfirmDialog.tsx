@@ -1,6 +1,4 @@
 import { ReactNode, useState } from 'react';
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -12,8 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from './ui/dialog';
-
-SyntaxHighlighter.registerLanguage('json', json);
 
 export type ConfirmDialogProps = {
   children: ReactNode;
