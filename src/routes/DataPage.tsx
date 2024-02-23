@@ -16,6 +16,8 @@ const KEY_TO_LABEL: Record<Storage.Keys, string> = {
 };
 
 export function DataPage() {
+  const noClipboardWrite = !navigator.clipboard || !navigator.clipboard.writeText;
+  const noClipboardRead = !navigator.clipboard || !navigator.clipboard.readText;
   const [data, setData] = useBetterLoaderData<Storage.Data.Raw>();
   const [loading, setLoading] = useState(false);
 
@@ -31,13 +33,43 @@ export function DataPage() {
     }
   };
 
+  const onImport = async () => {
+    setLoading(true);
+
+    try {
+      const text = await navigator.clipboard.readText();
+      const data: Storage.Data = Storage.convert(JSON.parse(atob(text)) as Storage.Data.Raw);
+
+      await Storage.load(data);
+      setData(await Storage.everything(true));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <PageHeader className="justify-between">
         <h1 className="text-2xl leading-none">Data</h1>
-        <Button variant="destructive" onClick={onClear} disabled={loading}>
-          Clear
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="ghost" onClick={onImport} disabled={noClipboardRead}>
+            Import
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              navigator.clipboard.writeText(btoa(JSON.stringify(data)));
+            }}
+            disabled={noClipboardWrite}
+          >
+            Export
+          </Button>
+          <Button variant="destructive" onClick={onClear} disabled={loading}>
+            Clear
+          </Button>
+        </div>
       </PageHeader>
       <PageContent>
         {Object.keys(data).map((key) => (
