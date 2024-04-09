@@ -82,10 +82,10 @@ export function Header({ children }: HeaderProps) {
               );
             })}
         </div>
-        <ButtonIcon icon={Bug} to="https://github.com/rain-cafe/devkit.lgbt/issues" variant="ghost">
+        <ButtonIcon icon={Bug} to="https://github.com/ribbon-studios/devkit.lgbt/issues" variant="ghost">
           Report an Issue
         </ButtonIcon>
-        <ButtonIcon icon={Code} to="https://github.com/rain-cafe/devkit.lgbt" variant="ghost">
+        <ButtonIcon icon={Code} to="https://github.com/ribbon-studios/devkit.lgbt" variant="ghost">
           Source Code
         </ButtonIcon>
       </div>
