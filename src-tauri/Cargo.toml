@@ -2,9 +2,9 @@
 name = "devkit-app"
 version = "0.1.7"
 description = "A kit of local-only utilities~"
-authors = ["Rainbow Cafe"]
+authors = ["Ribbon Studios"]
 license = "MIT"
-repository = "https://github.com/rain-cafe/devkit.lgbt"
+repository = "https://github.com/ribbon-studios/devkit.lgbt"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

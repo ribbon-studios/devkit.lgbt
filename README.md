@@ -15,7 +15,7 @@ Releases occur every time a change is made to the **main** branch of the repo.
 
 #### Native App
 
-See [Releases](https://github.com/rain-cafe/devkit.lgbt/releases/latest)!
+See [Releases](https://github.com/ribbon-studios/devkit.lgbt/releases/latest)!
 
 Releases occur every time a tag is pushed to the repo.
 
