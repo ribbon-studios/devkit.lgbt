@@ -4,7 +4,7 @@ import { PageContent } from '@/components/PageContent';
 import { PageHeader } from '@/components/PageHeader';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useSubtleCrypto } from '@rain-cafe/react-utils';
+import { useSubtleCrypto } from '@ribbon-studios/react-utils';
 import { useState } from 'react';
 
 export enum HashingAlgorithm {

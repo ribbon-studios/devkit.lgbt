@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { useCachedState } from '@rain-cafe/react-utils';
+import { useCachedState } from '@ribbon-studios/react-utils';
 
 export type ComboboxProps<T extends string> = {
   options: Combobox.Option<T>[];

@@ -1,4 +1,4 @@
-import { useCachedState } from '@rain-cafe/react-utils';
+import { useCachedState } from '@ribbon-studios/react-utils';
 import { useLoaderData } from 'react-router-dom';
 
 export function useBetterLoaderData<T>(): [T, React.Dispatch<T>];
