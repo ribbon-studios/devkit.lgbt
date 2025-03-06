@@ -5,15 +5,15 @@ import { Toaster } from '@/components/ui/sonner';
 import { loadSettings } from '@/slices/settings.slice';
 import { useAppDispatch } from '@/slices/state';
 import { Home } from 'lucide-react';
+import { useEffect } from 'react';
 import { Link, Outlet, useRouteError } from 'react-router-dom';
-import { useEffectOnce } from 'usehooks-ts';
 
 export function Component() {
   const dispatch = useAppDispatch();
 
-  useEffectOnce(() => {
+  useEffect(() => {
     dispatch(loadSettings());
-  });
+  }, []);
 
   return (
     <Header>

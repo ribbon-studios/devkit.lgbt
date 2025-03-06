@@ -1,3 +1,5 @@
+@reference '@/index.css';
+
 .editor {
   :global .bangle-editor {
     @apply outline-none;

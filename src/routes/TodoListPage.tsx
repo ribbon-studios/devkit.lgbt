@@ -13,7 +13,6 @@ import { useCachedState } from '@ribbon-studios/react-utils';
 import { Flame } from 'lucide-react';
 import { useMemo } from 'react';
 import { Link, LoaderFunctionArgs, Navigate, redirect, useLoaderData } from 'react-router-dom';
-import { useIsFirstRender } from 'usehooks-ts';
 
 export async function loader({ params }: LoaderFunctionArgs<any>) {
   if (!params.id) return redirect('/');
@@ -26,7 +25,6 @@ export async function loader({ params }: LoaderFunctionArgs<any>) {
 }
 
 export function Component() {
-  const isFirstRender = useIsFirstRender();
   const externalList = useLoaderData() as Todo.List;
   const [list, setList] = useCachedState<Todo.List>(() => externalList, [externalList]);
   const allDone = useMemo(() => {
@@ -98,7 +96,7 @@ export function Component() {
           blank
         />
         <ListItems
-          autoFocus={!isFirstRender}
+          autoFocus={true}
           items={list.items}
           onChange={(updatedItems) => {
             onChange({
